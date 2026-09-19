@@ -11,7 +11,7 @@ Configure visual paths in `invitationData.assets` at the top of `../script.js`. 
 | Asset / configuration key | Status | Replacement requirements |
 | --- | --- | --- |
 | `floral-arch.webp` / `floralArch` | Included: 1024 × 1536, RGBA, 484,778 bytes | Straight-on portrait arch of white/ivory roses, hydrangea and subtle sage foliage; genuinely transparent middle and surroundings. Flowers run along both sides and a semicircular top. Keep the doorway opening empty. |
-| `embossed-paper.webp` / `embossedPaper` | Included: 960 × 1440, RGB, 192,394 bytes | Flat full-bleed warm ivory cotton paper with raised botanical ornament. Keep the center calm. No text, lettering, monogram, seal, fold lines, phone, hands, or external background. DOM flaps supply the physical fold geometry. |
+| `embossed-paper-landscape.webp` / `embossedPaper` | Included: 1200 × 800, RGB, 95,422 bytes | Landscape warm ivory cotton paper with raised botanical ornament. Keep the center calm. No text, lettering, monogram, seal, fold lines, phone, hands, or external background. DOM flaps supply the physical fold geometry. |
 | `wax-seal.webp` / `waxSeal` | Included: 512 × 512, RGBA, 77,954 bytes | Isolated round antique champagne wax seal with a botanical rosette and true alpha. No initials, Arabic or English letters, numbers, logos, or external cast shadow. |
 | `interior.webp` / `interior` | Included: 940 × 1672, RGB, 204,118 bytes | Portrait architectural room, head-on symmetry, center vanishing point, empty foreground. No people, table, pedestal, card, or text baked into this background. Keep the key arch and light centered. |
 | `paper-texture.webp` / `paperTexture` | Included: 512 × 512, RGB, 5,888 bytes | Quiet warm ivory paper texture with no writing, objects, vignette, or strong directional illumination. Shared by the inside paper and invitation background for a continuous transition. |
@@ -34,7 +34,7 @@ Asset load failures retain procedural equivalents where available. Optional file
 
 `social-preview-v2.webp` is the current static social sharing image: 1200 × 628, 98,130 bytes. It shows the floral entrance and embossed invitation on an oval stone table without lettering or people, and remains separate from the moving cinematic layers.
 
-The former `bride.webp` and `social-preview.webp` are retired, retained source files. Neither is referenced or loaded by the page. The `bride` configuration key has been removed.
+The former `bride.webp`, portrait `embossed-paper.webp`, and `social-preview.webp` are retired source files. They are neither loaded nor included in the deployment. The `bride` configuration key has been removed.
 
 ## Framing and integration
 
@@ -42,7 +42,7 @@ Use genuine alpha for the floral arch, seal, and optional object cutouts; a rend
 
 Door images should not contain a separate frame or pre-rotated perspective: CSS `rotateY()` supplies the perspective during opening. Replacement doors and tables should fit their DOM object dimensions closely. Keep the room's horizon and vanishing point consistent with the table surface.
 
-The embossed invitation initially touches the table and has an independent contact shadow. As it gently rises, that shadow becomes broader and softer. Do not bake a duplicate invitation or contact shadow into the table image. The seal and embossing must remain free of writing throughout the intro.
+The landscape invitation lies flat on the table, with zero sideways roll and an independent contact shadow. It rises only 8px while remaining parallel to the tabletop; only the user's opening gesture lifts it toward the viewer. Door leaves rotate inward to 88° and remain clipped inside the aperture, behind the fixed floral frame. Do not bake a duplicate invitation or contact shadow into the table image. The seal and embossing remain free of writing throughout the intro.
 
 After replacing assets, inspect 360 × 800, 375 × 812, 390 × 844, 393 × 873, and 430 × 932, plus desktop and landscape. Confirm flowers frame the opening, door leaves hinge naturally, the table and card stay centered, one deliberate activation opens the flaps, and scroll remains locked until entry completes. Prefer compressed WebP/AVIF, preserving alpha where needed.
 

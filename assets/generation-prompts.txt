@@ -34,6 +34,17 @@ Constraints: NO text, NO letters, NO numbers, NO Arabic or English calligraphy, 
 
 
 
+Created with built-in image_gen. Optimized landscape WebP material.
+
+Use case: product-mockup.
+Asset type: Landscape full-bleed embossed-paper material texture for a physically modeled horizontal wedding envelope on a website. This is a material map only, not an envelope or a mockup.
+Primary request: A premium warm ivory cotton-paper sheet filling every pixel of a 3:2 landscape horizontal image, photographed perfectly straight on with zero perspective. Beautiful tactile blind-embossed botanical rosettes, tiny raised flowers, curling leafy sprays and delicate arabesque floral details form airy ornamental clusters near the four corners and along the top and bottom edges. The center approximately 55 percent of the sheet stays calm and empty for a separately composited wax seal. The botanical motifs are delicately sculpted low relief in exactly the same ivory as the paper, with convincing fine petals and tiny stems. The feeling is high-end luxury wedding stationery, refined and intricate without excessive density.
+Materials and lighting: Thick ivory cotton fiber paper, faint visible tactile grain, exquisite sculpted bas-relief, soft top-left studio light making small warm shadows under embossing. Authentic physical paper texture, not a flat illustration.
+Palette: Warm ivory #F4EFE7 and light cream #E8DDD0, subtly warm shadows, no overall pink cast.
+Composition: 3:2 landscape. The texture completely fills the whole frame from edge to edge. Even paper plane with absolutely no tilt, rotation, sheet edge, framing, table, background, or visible outside.
+Constraints: ONLY the material texture. NO envelope folds, NO diagonal lines, NO flap, NO wax seal, NO paper border, NO text, NO Arabic or English letters, NO numbers, NO writing, NO monogram, NO logo, NO watermark, NO phone, screen, hand, person or other object.
+
+
 Created with built-in image_gen. Optimized to 1200x628 WebP.
 
 Use case: product-mockup.

@@ -6,7 +6,7 @@ Verified locally in headless Chrome on 19 September 2026. These are browser view
 | --- | --- |
 | 360 × 800, 375 × 812, 390 × 844, 393 × 873, 430 × 932 | Complete interaction passes |
 | Desktop, 1440 × 1000 | Entrance, card, invitation, story visually inspected |
-| Automatic presentation | Envelope gently rises from the table as the doors open |
+| Automatic presentation | Landscape envelope stays flat over the table; rise is limited to 8px, with zero in-plane rotation |
 | One tap, followed by five rapid touch events | Envelope opens once; every following state occurs exactly once |
 | Opening materials | Paper flaps hinge open and warm light appears; no visible writing is painted before the actual invitation |
 | Reduced motion | Camera journey omitted; one deliberate activation opens the invitation |
@@ -14,6 +14,7 @@ Verified locally in headless Chrome on 19 September 2026. These are browser view
 | Scroll | Locked before entry; unlocked afterward |
 | Geometry | Oval table and card anchor stay centered; contact shadow remains; the open paper fits mobile width |
 | Camera composition | Bride removed; loaded white floral arch frames hinged doors; cinematic container cannot scroll when the card receives focus |
+| Door opening | Inspected at 350, 850, and 1350ms: leaves rotate inward, stay inside the aperture, and do not protrude beyond the flowers |
 | Arabic | Names آلاء / ياسر and initials آ / ي are restricted to the actual invitation and checked in DOM/screenshots |
 | Runtime and network | No console or page errors across the five mobile sizes; assets and fonts served locally |
 | No video | No video element or video playback dependency |

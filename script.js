@@ -24,7 +24,7 @@ const invitationData = Object.freeze({
   assets: Object.freeze({
     interior: "assets/interior.webp",
     floralArch: "assets/floral-arch.webp",
-    embossedPaper: "assets/embossed-paper.webp",
+    embossedPaper: "assets/embossed-paper-landscape.webp",
     waxSeal: "assets/wax-seal.webp",
     doorLeft: null,
     doorRight: null,
@@ -357,7 +357,10 @@ const invitationData = Object.freeze({
     setState(STATES.ENTERING_CARD);
     // Paper must cover wide screens too; center and cover travel independently.
     const cardWidth = card.offsetWidth;
-    body.style.setProperty("--entry-scale", String(Math.max(6.6, window.innerWidth / cardWidth * 1.2)));
+    const anchor = document.querySelector(".card-anchor").getBoundingClientRect();
+    const travelCenterY = anchor.top + anchor.height / 2 + window.innerHeight * .1;
+    const verticalFill = 2 * Math.max(travelCenterY, window.innerHeight - travelCenterY) / card.offsetHeight;
+    body.style.setProperty("--entry-scale", String(Math.max(6.6, window.innerWidth / cardWidth * 1.2, verticalFill * 1.05)));
     body.classList.add("entering-card");
     if (!(await wait(reducedMotion ? 220 : 2100, token))) return;
     await activateInvitation(token);

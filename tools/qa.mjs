@@ -82,6 +82,19 @@ try {
       });
       assert(floralLoaded, 'The entrance has a loaded floral asset');
       if (width === 390) await page.screenshot({ path: '.qa/mobile-entrance.png' });
+      if (width === 390) {
+        await page.waitForFunction(() => document.body.dataset.state === 'DOOR_OPENING');
+        const doorsStartedAt = Date.now();
+        for (const elapsed of [350, 850, 1350]) {
+          await page.waitForTimeout(Math.max(0, doorsStartedAt + elapsed - Date.now()));
+          await page.screenshot({ path: `.qa/mobile-doors-${elapsed}ms.png` });
+        }
+        const aperture = await page.locator('.door-aperture').evaluate(element => {
+          const style = getComputedStyle(element);
+          return { overflowX: style.overflowX, overflowY: style.overflowY, clipPath: style.clipPath };
+        });
+        assert(['clip', 'hidden'].includes(aperture.overflowX) || aperture.clipPath !== 'none', 'Door aperture clips the swinging leaves within the flower border');
+      }
 
       await page.waitForFunction(() => document.body.dataset.state === 'CARD_READY');
       await assertIntroHasNoText(page);
@@ -89,12 +102,16 @@ try {
         const card = document.getElementById('invitation-card').getBoundingClientRect();
         const anchor = document.querySelector('.card-anchor').getBoundingClientRect();
         const table = document.querySelector('.pedestal').getBoundingClientRect();
+        const top = document.querySelector('.pedestal-top').getBoundingClientRect();
+        const lift = new DOMMatrixReadOnly(getComputedStyle(document.querySelector('.card-lift')).transform);
         const contact = document.querySelector('.pedestal-contact');
         return {
           scroll: getComputedStyle(document.body).overflow,
           card: { x: card.x, y: card.y, width: card.width, height: card.height, bottom: card.bottom },
           anchor: { x: anchor.x, width: anchor.width },
           table: { x: table.x, y: table.y, width: table.width },
+          tabletop: { x: top.x, y: top.y, right: top.right, bottom: top.bottom },
+          physicalPose: { rollX: lift.m12, rollY: lift.m21, pitchCos: lift.m22, liftY: lift.m42 },
           automaticallyPresented: document.body.classList.contains('card-presented'),
           shadowVisible: Number(getComputedStyle(contact).opacity) > 0,
           arabic: [...document.querySelectorAll('#invitation [data-bind]')].map(element => element.textContent)
@@ -105,6 +122,12 @@ try {
       assert(initial.card.y >= 0 && initial.card.bottom <= height, 'Envelope fits the mobile height');
       assert(Math.abs(initial.anchor.x + initial.anchor.width / 2 - width / 2) < 3, 'Envelope anchor is centered while the physical card tilts');
       assert(Math.abs(initial.table.x + initial.table.width / 2 - width / 2) < 2, 'Table remains centered');
+      assert(initial.card.width / initial.card.height > 2, 'Invitation rests flat with a shallow landscape projection');
+      assert(Math.abs(initial.physicalPose.rollX) < 0.001 && Math.abs(initial.physicalPose.rollY) < 0.001, 'Card has no in-plane roll');
+      assert(Math.abs(initial.physicalPose.liftY + 8) < 0.5, 'Automatic presentation only lifts the card by 8px');
+      assert(initial.card.x >= initial.tabletop.x - 12 && initial.card.x + initial.card.width <= initial.tabletop.right + 12 &&
+        initial.card.y >= initial.tabletop.y - 12 && initial.card.bottom <= initial.tabletop.bottom + 12,
+      'The flat invitation remains over the tabletop');
       assert(initial.automaticallyPresented, 'Envelope rises gently before the first user tap');
       assert(initial.shadowVisible, 'Table contact shadow remains present');
       assert(initial.arabic.includes('\u0622\u0644\u0627\u0621') && initial.arabic.includes('\u064a\u0627\u0633\u0631'), 'The invitation contains the correct joined Arabic names');

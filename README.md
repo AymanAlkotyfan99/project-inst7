@@ -36,7 +36,7 @@ The recognizable Arabic initials آ and ي appear only in the main invitation fo
 The intro has no bride. The closed entrance carries a separate photographic white floral arch; each door leaf rotates around its own hinge. An oval stone tabletop with two legs supports the invitation and its contact shadow.
 
 1. After a short pause, the doors open automatically.
-2. The invitation gently rises and tilts into view as the camera approaches the table.
+2. The landscape invitation stays flat and straight on the white tabletop. As the doors open inward within the floral frame, the paper rises only 8 pixels without standing upright or tilting sideways.
 3. In `CARD_READY`, one deliberate tap opens the physical paper flaps. Soft champagne light grows from inside.
 4. The paper transition completes and the invitation's Arabic content appears. Scrolling unlocks only when the invitation becomes active.
 
@@ -48,9 +48,9 @@ Sound starts disabled. The small sound control enables quiet synthesized materia
 
 ## Assets and delivery
 
-The active photographic layers are the interior, transparent floral arch, embossed paper, and transparent floral wax seal. Together with the reusable paper texture, these are about 943 KiB. The social preview is a separate static sharing image. Architecture, door hinges, the oval table, envelope flaps, contact shadow, opening light, and paper transition use independent DOM/CSS layers.
+The active photographic layers are the interior, transparent floral arch, landscape embossed paper, and transparent floral wax seal. Together with the reusable paper texture, these are about 848 KiB. The social preview is a separate static sharing image. Architecture, door hinges, the oval table, envelope flaps, contact shadow, opening light, and paper transition use independent DOM/CSS layers.
 
-The original `bride.webp` and `social-preview.webp` are retained as retired source assets. The page does not reference or load them. The current social preview is `assets/social-preview-v2.webp`.
+The original `bride.webp`, portrait `embossed-paper.webp`, and `social-preview.webp` remain as retired source assets and are excluded from the build. The current social preview is `assets/social-preview-v2.webp`.
 
 Amiri, IBM Plex Sans Arabic, and Cormorant Garamond are bundled as local WOFF2 subsets in `assets/fonts`, with their SIL Open Font License notices. The finished page makes no external font, script, or image requests. `tools/vendor-fonts.mjs` is a one-time maintenance helper; it is not used at runtime.
 
