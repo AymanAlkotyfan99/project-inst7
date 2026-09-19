@@ -37,14 +37,16 @@ The intro has no bride. The closed entrance carries a separate photographic whit
 
 1. After a short pause, the doors open automatically.
 2. The landscape invitation stays flat and straight on the white tabletop. As the doors open inward within the floral frame, the paper rises only 8 pixels without standing upright or tilting sideways.
-3. In `CARD_READY`, one deliberate tap opens the physical paper flaps. Soft champagne light grows from inside.
-4. The paper transition completes and the invitation's Arabic content appears. Scrolling unlocks only when the invitation becomes active.
+3. In `CARD_READY`, warm light outlines the sealed paper and all four corners glow gently. One deliberate tap releases the seal, then unfolds the paper slowly over 3.4 seconds.
+4. Six soft sunlight beams emerge from inside. The fully opened envelope holds for 2.3 seconds before a 2.5-second paper push-in reveals the Arabic invitation. Scrolling unlocks only when the invitation becomes active.
 
 The opening has no visible instructions, names, initials, or other lettering. Subtle icon-only skip and sound controls retain Arabic accessible labels. State changes have screen-reader announcements. The invitation is a native button supporting touch, mouse, stylus, and keyboard activation; taps during transitions are ignored. The footer can replay the experience.
 
 Reduced-motion preferences suppress the camera journey and decorative motion while keeping the same single card activation. Changing that preference during a sequence cancels pending animation work safely. Focus transfers to the invitation when it opens. Inactive content is inert, and Arabic RTL text has no letter spacing on Arabic words.
 
 Sound starts disabled. The small sound control enables quiet synthesized material cues only after the visitor activates it. JavaScript is required for the interactive opening; a no-script notice explains this.
+
+The `motion` settings in `invitationData` control seal release, unfolding, sunlight hold, and paper entry in milliseconds. CSS durations are derived from the same settings. Reduced motion keeps short transitions, disables pulsing corners and ray streaks, and preserves the single activation.
 
 ## Assets and delivery
 

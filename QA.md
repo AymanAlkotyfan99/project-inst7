@@ -9,6 +9,9 @@ Verified locally in headless Chrome on 19 September 2026. These are browser view
 | Automatic presentation | Landscape envelope stays flat over the table; rise is limited to 8px, with zero in-plane rotation |
 | One tap, followed by five rapid touch events | Envelope opens once; every following state occurs exactly once |
 | Opening materials | Paper flaps hinge open and warm light appears; no visible writing is painted before the actual invitation |
+| Sealed envelope | Warm rim light and four softly illuminated corners are visible before touch |
+| Slow opening | Still opening two seconds after activation; unfolding lasts 3.4 seconds after the seal releases |
+| Sunlight sequence | Six rays expand from the envelope; the fully opened paper holds for 2.3 seconds before entry |
 | Reduced motion | Camera journey omitted; one deliberate activation opens the invitation |
 | Replay and skip | Correct state reset; no old delayed actions resume |
 | Scroll | Locked before entry; unlocked afterward |

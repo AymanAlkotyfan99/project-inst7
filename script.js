@@ -19,6 +19,8 @@ const invitationData = Object.freeze({
   mapsUrl: null,
   openingPhrase: "ومن بين كل الحكايات... بدأت حكايتنا",
   closingPhrase: "بانتظاركم لتكتمل الحكاية",
+  // Milliseconds: a deliberate seal release, slow unfolding, sunlight, then entry.
+  motion: Object.freeze({ sealRelease: 650, opening: 3400, sunlightHold: 2300, entry: 2500 }),
   // Optional assets are requested only when their path is configured.
   // Transparent door/pedestal assets should be tightly cropped to their object.
   assets: Object.freeze({
@@ -37,6 +39,10 @@ const invitationData = Object.freeze({
 
 (() => {
   const body = document.body;
+  const motion = invitationData.motion;
+  body.style.setProperty("--envelope-opening", `${motion.opening}ms`);
+  body.style.setProperty("--seal-release", `${motion.sealRelease}ms`);
+  body.style.setProperty("--paper-entry", `${motion.entry}ms`);
   const cinematic = document.getElementById("cinematic");
   const invitation = document.getElementById("invitation");
   const card = document.getElementById("invitation-card");
@@ -51,7 +57,7 @@ const invitationData = Object.freeze({
   const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const phaseClasses = [
     "scene-started", "doors-open", "camera-entered",
-    "approached", "card-pressed", "card-presented", "card-opened",
+    "approached", "card-pressed", "card-presented", "seal-released", "card-opened", "sunlight-bloom",
     "foil-drawn", "entering-card", "invitation-active", "hint-visible",
     "skip-entry"
   ];
@@ -344,16 +350,17 @@ const invitationData = Object.freeze({
     setHint("", false);
     setState(STATES.CARD_OPENING, "تُفتح الدعوة.");
     playSound("touch");
-    if (!(await wait(reducedMotion ? 30 : 80, token))) return;
+    if (!(await wait(reducedMotion ? 30 : 100, token))) return;
     body.classList.remove("card-pressed");
     setHandVisible(false);
+    body.classList.add("seal-released");
+    if (!(await wait(reducedMotion ? 70 : motion.sealRelease, token))) return;
     body.classList.add("card-opened");
     playSound("open");
-    if (!(await wait(reducedMotion ? 240 : 1500, token))) return;
+    if (!(await wait(reducedMotion ? 240 : motion.opening, token))) return;
     setState(STATES.CARD_OPEN);
-    body.classList.add("foil-drawn");
-    if (!(await wait(reducedMotion ? 120 : 900, token))) return;
-    if (!(await wait(reducedMotion ? 80 : 450, token))) return;
+    body.classList.add("foil-drawn", "sunlight-bloom");
+    if (!(await wait(reducedMotion ? 200 : motion.sunlightHold, token))) return;
     setState(STATES.ENTERING_CARD);
     // Paper must cover wide screens too; center and cover travel independently.
     const cardWidth = card.offsetWidth;
@@ -362,7 +369,7 @@ const invitationData = Object.freeze({
     const verticalFill = 2 * Math.max(travelCenterY, window.innerHeight - travelCenterY) / card.offsetHeight;
     body.style.setProperty("--entry-scale", String(Math.max(6.6, window.innerWidth / cardWidth * 1.2, verticalFill * 1.05)));
     body.classList.add("entering-card");
-    if (!(await wait(reducedMotion ? 220 : 2100, token))) return;
+    if (!(await wait(reducedMotion ? 220 : motion.entry, token))) return;
     await activateInvitation(token);
   }
 

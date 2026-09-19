@@ -13,9 +13,13 @@ const origin = process.env.QA_ORIGIN || 'http://localhost:5173';
 async function observeStates(page) {
   await page.addInitScript(() => {
     window.qaStates = [];
+    window.qaTransitions = [];
     const record = () => {
       const next = document.body?.dataset.state;
-      if (next && window.qaStates.at(-1) !== next) window.qaStates.push(next);
+      if (next && window.qaStates.at(-1) !== next) {
+        window.qaStates.push(next);
+        window.qaTransitions.push({ state: next, at: performance.now() });
+      }
     };
     new MutationObserver(record).observe(document, {
       childList: true, subtree: true, attributes: true, attributeFilter: ['data-state']
@@ -105,6 +109,8 @@ try {
         const top = document.querySelector('.pedestal-top').getBoundingClientRect();
         const lift = new DOMMatrixReadOnly(getComputedStyle(document.querySelector('.card-lift')).transform);
         const contact = document.querySelector('.pedestal-contact');
+        const aura = document.querySelector('.envelope-aura');
+        const corners = document.querySelector('.sunlit-corners');
         return {
           scroll: getComputedStyle(document.body).overflow,
           card: { x: card.x, y: card.y, width: card.width, height: card.height, bottom: card.bottom },
@@ -114,6 +120,12 @@ try {
           physicalPose: { rollX: lift.m12, rollY: lift.m21, pitchCos: lift.m22, liftY: lift.m42 },
           automaticallyPresented: document.body.classList.contains('card-presented'),
           shadowVisible: Number(getComputedStyle(contact).opacity) > 0,
+          closedAura: aura ? Number(getComputedStyle(aura).opacity) : 0,
+          cornerLight: corners ? Number(getComputedStyle(corners).opacity) : 0,
+          illuminatedCorners: corners ? [...corners.querySelectorAll('i')].filter(corner => {
+            const style = getComputedStyle(corner);
+            return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
+          }).length : 0,
           arabic: [...document.querySelectorAll('#invitation [data-bind]')].map(element => element.textContent)
         };
       });
@@ -130,26 +142,37 @@ try {
       'The flat invitation remains over the tabletop');
       assert(initial.automaticallyPresented, 'Envelope rises gently before the first user tap');
       assert(initial.shadowVisible, 'Table contact shadow remains present');
+      assert(initial.closedAura > 0, 'The closed envelope glows before any touch');
+      assert(initial.cornerLight > 0, 'Warm sunlight is visible at the closed envelope corners');
+      assert.equal(initial.illuminatedCorners, 4, 'All four envelope corners catch sunlight before touch');
       assert(initial.arabic.includes('\u0622\u0644\u0627\u0621') && initial.arabic.includes('\u064a\u0627\u0633\u0631'), 'The invitation contains the correct joined Arabic names');
       await page.evaluate(() => scrollTo(0, 400));
       assert.equal(await page.evaluate(() => scrollY), 0, 'Scroll remains locked before entry');
       if (width === 390) await page.screenshot({ path: '.qa/mobile-card-ready.png' });
 
       const card = page.locator('#invitation-card');
+      const tappedAt = await page.evaluate(() => performance.now());
       await card.tap();
       // Subsequent rapid/double taps must not restart opening or skip a phase.
       for (let index = 0; index < 5; index += 1) {
         await page.touchscreen.tap(width / 2, initial.card.y + initial.card.height / 2);
       }
+      const sinceTap = await page.evaluate(startedAt => performance.now() - startedAt, tappedAt);
+      await page.waitForTimeout(Math.max(0, 2000 - sinceTap));
+      assert.equal(await page.getAttribute('body', 'data-state'), 'CARD_OPENING', 'The envelope should still be unfolding two seconds after the tap');
+      if (width === 390) await page.screenshot({ path: '.qa/mobile-card-mid-opening.png' });
       await page.waitForFunction(() => document.body.dataset.state === 'CARD_OPEN');
       await assertIntroHasNoText(page);
       const opened = await page.evaluate(() => {
         const inside = document.querySelector('.card-back').getBoundingClientRect();
         const glow = document.querySelector('.card-light');
         const flap = document.querySelector('.envelope-flap');
+        const rays = document.querySelector('.sun-rays');
         return {
           inside: { x: inside.x, width: inside.width },
           glow: glow ? Number(getComputedStyle(glow).opacity) : 0,
+          sunlight: rays ? Number(getComputedStyle(rays).opacity) : 0,
+          sunlightRays: rays ? [...rays.querySelectorAll('i')].filter(ray => Number(getComputedStyle(ray).opacity) > 0).length : 0,
           flapTransform: flap ? getComputedStyle(flap).transform : 'none',
           isOpened: document.body.classList.contains('card-opened'),
           sceneScroll: {
@@ -161,6 +184,7 @@ try {
       });
       assert(opened.inside.x >= -2 && opened.inside.x + opened.inside.width <= width + 2, 'Open paper fits mobile');
       assert(opened.glow > 0, 'Light emerges from the open envelope');
+      assert(opened.sunlight > 0 && opened.sunlightRays >= 4, 'Visible sunlight beams emerge from the opened paper');
       assert(opened.flapTransform !== 'none', 'Envelope flap physically hinges open');
       assert(opened.isOpened);
       assert.deepEqual(opened.sceneScroll, { x: 0, y: 0 }, 'Opening and focus must never scroll the cinematic layers');
@@ -170,11 +194,20 @@ try {
       await page.waitForFunction(() => document.body.dataset.state === 'INVITATION_ACTIVE');
       await page.waitForTimeout(1200);
       const sequence = await page.evaluate(() => window.qaStates);
+      const transitions = await page.evaluate(() => window.qaTransitions);
       for (const phase of ['CARD_READY', 'CARD_OPENING', 'CARD_OPEN', 'ENTERING_CARD', 'INVITATION_ACTIVE']) {
         assert.equal(sequence.filter(value => value === phase).length, 1, `${phase} should occur exactly once despite repeated taps`);
       }
       assert(sequence.indexOf('CARD_OPEN') < sequence.indexOf('ENTERING_CARD'));
       assert(sequence.indexOf('ENTERING_CARD') < sequence.indexOf('INVITATION_ACTIVE'));
+      const stateAt = phase => transitions.find(transition => transition.state === phase).at;
+      const timing = {
+        opening: stateAt('CARD_OPEN') - stateAt('CARD_OPENING'),
+        sunlightHold: stateAt('ENTERING_CARD') - stateAt('CARD_OPEN'),
+        entry: stateAt('INVITATION_ACTIVE') - stateAt('ENTERING_CARD')
+      };
+      assert(timing.opening >= 3300, 'The physical envelope unfolds slowly');
+      assert(timing.sunlightHold >= 2000, 'Sunlight holds for at least two seconds before entering the invitation');
       assert.notEqual(await page.evaluate(() => getComputedStyle(document.body).overflow), 'hidden');
       assert.equal(await page.locator('#invitation').getAttribute('inert'), null);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
@@ -185,7 +218,7 @@ try {
       await page.waitForTimeout(500);
       assert((await page.evaluate(() => scrollY)) > 0);
       assert.deepEqual(errors, [], 'Page must have no console or runtime errors');
-      results.push({ width, height, pass: true, errors, initial, opened, sequence });
+      results.push({ width, height, pass: true, errors, initial, opened, sequence, timing });
       await context.close();
     }
 
