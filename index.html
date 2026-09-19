@@ -10,7 +10,7 @@
   <meta property="og:title" content="دعوة إلى حكايتنا">
   <meta property="og:description" content="افتح الباب… وادخل الحكاية. دعوة زفاف بتجربة تفاعلية.">
   <meta property="og:url" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site">
-  <meta property="og:image" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site/assets/social-preview.webp">
+  <meta property="og:image" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site/assets/social-preview-v2.webp">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="628">
   <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +18,7 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <link rel="preload" href="assets/interior.webp" as="image" fetchpriority="high">
-  <link rel="preload" href="assets/bride.webp" as="image">
+  <link rel="preload" href="assets/floral-arch.webp" as="image">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -37,33 +37,26 @@
       <div class="pedestal" aria-hidden="true">
         <div class="pedestal-top"></div>
         <div class="pedestal-cap"></div>
-        <div class="pedestal-body"></div>
-        <div class="pedestal-foot"></div>
+        <div class="table-leg table-leg-left"></div>
+        <div class="table-leg table-leg-right"></div>
+        <div class="table-floor-shadow"></div>
         <div class="pedestal-contact"></div>
       </div>
       <div class="card-anchor">
         <div class="card-lift">
-          <button id="invitation-card" class="invitation-card" type="button" disabled aria-label="ارفع الدعوة">
+          <button id="invitation-card" class="invitation-card" type="button" disabled aria-label="افتح دعوة الزفاف">
             <span class="card-back">
-              <span class="card-inside paper">
-                <span class="inside-eyebrow">حكايةٌ كُتبت لنا</span>
-                <span class="inside-names"><span data-bind="brideName"></span><span class="inside-and">و</span><span data-bind="groomName"></span></span>
-                <span class="foil-line"></span>
-                <span class="inside-footnote">ومعكم، يكتمل الفرح</span>
-              </span>
+              <span class="card-inside paper" aria-hidden="true"><span class="paper-radiance"></span></span>
             </span>
-            <span class="card-cover">
-              <span class="cover-front paper">
-                <span class="card-border"></span>
-                <span class="cover-kicker">دعوة زفاف</span>
-                <span class="monogram" aria-hidden="true"><span class="monogram-bride" data-bind="brideInitial"></span><span class="monogram-groom" data-bind="groomInitial"></span></span>
-                <span class="cover-rule"></span>
-                <span class="cover-names"><span data-bind="brideName"></span><span class="cover-dot">•</span><span data-bind="groomName"></span></span>
-                <span class="cover-footer" lang="en" dir="ltr">THE BEGINNING OF ALWAYS</span>
-                <span class="foil-reflection"></span>
-              </span>
-              <span class="cover-reverse paper"><span class="reverse-ornament">وَجَعَلَ بَيْنَكُم مَوَدَّةً وَرَحْمَةً</span></span>
+            <span class="card-light" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="envelope-side envelope-left embossed-paper" aria-hidden="true"></span>
+            <span class="envelope-side envelope-right embossed-paper" aria-hidden="true"></span>
+            <span class="envelope-bottom embossed-paper" aria-hidden="true"></span>
+            <span class="envelope-flap" aria-hidden="true">
+              <span class="flap-front embossed-paper"></span>
+              <span class="flap-back paper"></span>
             </span>
+            <span class="wax-seal" aria-hidden="true"><img src="assets/wax-seal.webp" alt="" decoding="async"><span class="foil-reflection"></span></span>
           </button>
         </div>
       </div>
@@ -76,29 +69,21 @@
         <div class="arch-frame arch-frame-outer"></div>
         <div class="arch-frame arch-frame-inner"></div>
         <div class="door-aperture">
-          <div class="door door-left"><div class="door-panel"><span class="door-medallion">❧</span></div><span class="door-handle"></span></div>
-          <div class="door door-right"><div class="door-panel"><span class="door-medallion">❧</span></div><span class="door-handle"></span></div>
+          <div class="door door-left"><div class="door-panel"><span class="door-medallion"></span></div><span class="door-handle"></span></div>
+          <div class="door door-right"><div class="door-panel"><span class="door-medallion"></span></div><span class="door-handle"></span></div>
         </div>
         <div class="door-threshold"></div>
+        <img class="floral-arch" src="assets/floral-arch.webp" alt="" decoding="async" data-critical>
       </div>
       <div class="sconce sconce-left"><i></i></div><div class="sconce sconce-right"><i></i></div>
       <div class="entrance-floor"></div>
     </div>
 
-    <div class="bride-layer" aria-hidden="true"><img src="assets/bride.webp" alt="" decoding="async" data-critical></div>
     <div class="atmosphere" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <div class="scene-vignette" aria-hidden="true"></div>
     <div class="scene-grain" aria-hidden="true"></div>
 
-    <div class="scene-caption" aria-hidden="true">
-      <span class="caption-line"></span>
-      <p>لكلّ حكايةٍ باب</p>
-      <span lang="en" dir="ltr">A DOOR TO OUR FOREVER</span>
-    </div>
-    <div class="scene-signature" aria-hidden="true"><span data-bind="brideName"></span><i>و</i><span data-bind="groomName"></span></div>
-    <p id="card-hint" class="card-hint">المس الدعوة</p>
-    <button id="skip-intro" class="quiet-button skip-intro" type="button">إلى الدعوة <span aria-hidden="true">←</span></button>
-    <div class="chapter-index" aria-hidden="true"><span>01</span><i></i><span>THE INVITATION</span></div>
+    <button id="skip-intro" class="quiet-button skip-intro" type="button" aria-label="تجاوز المقدمة وافتح الدعوة"><i class="skip-icon" aria-hidden="true"></i></button>
   </div>
 
   <main id="invitation" class="invitation paper" inert>
@@ -152,7 +137,7 @@
       <div class="footer-bottom"><span lang="en" dir="ltr">WITH LOVE, ALWAYS.</span><button id="replay" class="quiet-button" type="button">عِش الحكاية من جديد <span aria-hidden="true">↻</span></button></div>
     </footer>
   </main>
-  <button id="sound-toggle" class="sound-toggle" type="button" aria-label="تشغيل الصوت" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sound-label">الصوت</span></button>
+  <button id="sound-toggle" class="sound-toggle" type="button" aria-label="تشغيل الصوت" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
   <noscript><div class="noscript-note" dir="rtl">لتجربة الدعوة التفاعلية، يرجى تفعيل JavaScript في المتصفح.</div></noscript>
 </body>
 </html>

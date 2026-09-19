@@ -22,8 +22,10 @@ const invitationData = Object.freeze({
   // Optional assets are requested only when their path is configured.
   // Transparent door/pedestal assets should be tightly cropped to their object.
   assets: Object.freeze({
-    bride: "assets/bride.webp",
     interior: "assets/interior.webp",
+    floralArch: "assets/floral-arch.webp",
+    embossedPaper: "assets/embossed-paper.webp",
+    waxSeal: "assets/wax-seal.webp",
     doorLeft: null,
     doorRight: null,
     pedestal: null,
@@ -48,8 +50,8 @@ const invitationData = Object.freeze({
   const parallaxLayers = [...document.querySelectorAll(".interior-image, .paper-plane")];
   const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const phaseClasses = [
-    "scene-started", "doors-open", "bride-aside", "camera-entered",
-    "approached", "card-pressed", "card-lifted", "card-opened",
+    "scene-started", "doors-open", "camera-entered",
+    "approached", "card-pressed", "card-presented", "card-opened",
     "foil-drawn", "entering-card", "invitation-active", "hint-visible",
     "skip-entry"
   ];
@@ -60,7 +62,7 @@ const invitationData = Object.freeze({
     CAMERA_ENTERING: "CAMERA_ENTERING",
     PEDESTAL_APPROACH: "PEDESTAL_APPROACH",
     CARD_READY: "CARD_READY",
-    CARD_LIFTED: "CARD_LIFTED",
+    CARD_PRESENTING: "CARD_PRESENTING",
     CARD_OPENING: "CARD_OPENING",
     CARD_OPEN: "CARD_OPEN",
     ENTERING_CARD: "ENTERING_CARD",
@@ -181,7 +183,17 @@ const invitationData = Object.freeze({
 
   function configureAssets() {
     const assets = invitationData.assets;
-    configureImage(document.querySelector(".bride-layer img"), assets.bride);
+    configureImage(document.querySelector(".floral-arch"), assets.floralArch);
+    configureImage(document.querySelector(".wax-seal img"), assets.waxSeal);
+    const embossUrl = assetUrl(assets.embossedPaper);
+    if (embossUrl) {
+      const texture = new Image();
+      configureImage(texture, embossUrl, () => {
+        document.querySelectorAll(".embossed-paper").forEach((layer) => {
+          layer.style.backgroundImage = `url(${JSON.stringify(embossUrl)})`;
+        });
+      });
+    }
     document.querySelectorAll(".interior-image, .architecture-detail img").forEach((image) => {
       configureImage(image, assets.interior);
     });
@@ -199,7 +211,7 @@ const invitationData = Object.freeze({
     const pedestal = document.querySelector(".pedestal");
     const pedestalImage = appendAsset(pedestal, assets.pedestal, "pedestal-asset", () => {
       pedestal.classList.add("has-pedestal-asset");
-      pedestal.querySelectorAll(".pedestal-top, .pedestal-cap, .pedestal-body, .pedestal-foot")
+      pedestal.querySelectorAll(".pedestal-top, .pedestal-cap, .table-leg")
         .forEach((part) => { part.hidden = true; });
     });
     if (pedestalImage) Object.assign(pedestalImage.style, { top: "-8px", objectFit: "fill", zIndex: "2" });
@@ -272,8 +284,8 @@ const invitationData = Object.freeze({
     invitation.setAttribute("aria-hidden", "true");
     card.disabled = true;
     activationGateUntil = 0;
-    card.setAttribute("aria-label", "ارفع دعوة الزفاف");
-    setHint("المس الدعوة", false);
+    card.setAttribute("aria-label", "افتح دعوة الزفاف");
+    setHint("", false);
     resetPointer();
     setHandVisible(false);
     // The reset is deliberately committed before transitions are re-enabled.
@@ -285,10 +297,10 @@ const invitationData = Object.freeze({
     if (token !== epoch) return;
     transitioning = false;
     card.disabled = false;
-    card.setAttribute("aria-label", `ارفع دعوة زفاف ${invitationData.brideName} و${invitationData.groomName}`);
-    setState(STATES.CARD_READY, "الدعوة أمامك. المسها لرفعها، ثم المسها مرة أخرى لفتحها.");
+    card.setAttribute("aria-label", `افتح دعوة زفاف ${invitationData.brideName} و${invitationData.groomName}`);
+    setState(STATES.CARD_READY, "الدعوة أمامك. المس الختم لفتحها.");
     if (await wait(1300, token)) {
-      if (state === STATES.CARD_READY && !transitioning) setHint("المس الدعوة", true);
+      if (state === STATES.CARD_READY && !transitioning) setHint("", true);
     }
   }
 
@@ -302,7 +314,7 @@ const invitationData = Object.freeze({
     body.classList.add("scene-started");
 
     if (reducedMotion) {
-      body.classList.add("doors-open", "bride-aside", "camera-entered", "approached");
+      body.classList.add("doors-open", "card-presented", "camera-entered", "approached");
       await makeCardReady(token);
       return;
     }
@@ -311,9 +323,10 @@ const invitationData = Object.freeze({
     setState(STATES.DOOR_OPENING);
     body.classList.add("doors-open");
     playSound("door");
-    if (!(await wait(1000, token))) return;
-    body.classList.add("bride-aside");
-    if (!(await wait(700, token))) return;
+    if (!(await wait(1450, token))) return;
+    setState(STATES.CARD_PRESENTING);
+    body.classList.add("card-presented");
+    if (!(await wait(250, token))) return;
     setState(STATES.CAMERA_ENTERING);
     body.classList.add("camera-entered");
     if (!(await wait(1800, token))) return;
@@ -323,37 +336,16 @@ const invitationData = Object.freeze({
     await makeCardReady(token);
   }
 
-  async function liftCard() {
-    const token = epoch;
-    const restoreCardFocus = document.activeElement === card;
-    transitioning = true;
-    card.disabled = true;
-    setHint("", false);
-    body.classList.add("card-pressed");
-    playSound("touch");
-    if (!(await wait(reducedMotion ? 40 : 80, token))) return;
-    body.classList.remove("card-pressed");
-    body.classList.add("card-lifted");
-    setHandVisible(true);
-    setState(STATES.CARD_LIFTED);
-    playSound("lift");
-    if (!(await wait(reducedMotion ? 220 : 1050, token))) return;
-    transitioning = false;
-    card.disabled = false;
-    card.setAttribute("aria-label", "افتح دعوة الزفاف");
-    if (restoreCardFocus) card.focus({ preventScroll: true });
-    setState(STATES.CARD_LIFTED, "ارتفعت الدعوة. المسها مرة أخرى لفتحها.");
-    setHint("المس لتفتح الحكاية", true);
-    // Intentionally stop here: opening always requires a second activation.
-  }
-
   async function openCard() {
     const token = epoch;
     transitioning = true;
     card.disabled = true;
-    body.classList.remove("card-pressed");
+    body.classList.add("card-pressed");
     setHint("", false);
     setState(STATES.CARD_OPENING, "تُفتح الدعوة.");
+    playSound("touch");
+    if (!(await wait(reducedMotion ? 30 : 80, token))) return;
+    body.classList.remove("card-pressed");
     setHandVisible(false);
     body.classList.add("card-opened");
     playSound("open");
@@ -418,8 +410,7 @@ const invitationData = Object.freeze({
   card.addEventListener("click", (event) => {
     if (transitioning || card.disabled || event.detail > 1 || performance.now() < activationGateUntil) return;
     activationGateUntil = performance.now() + 650;
-    if (state === STATES.CARD_READY) void liftCard();
-    else if (state === STATES.CARD_LIFTED) void openCard();
+    if (state === STATES.CARD_READY) void openCard();
   });
   if (skipButton) skipButton.addEventListener("click", skipIntro);
   if (replayButton) replayButton.addEventListener("click", replayIntro);
@@ -437,15 +428,8 @@ const invitationData = Object.freeze({
     body.classList.remove("card-pressed");
     if ([STATES.CARD_OPENING, STATES.CARD_OPEN, STATES.ENTERING_CARD].includes(previousState)) {
       void activateInvitation(token, true);
-    } else if (previousState === STATES.CARD_LIFTED) {
-      body.classList.add("card-lifted");
-      transitioning = false;
-      card.disabled = false;
-      card.setAttribute("aria-label", "افتح دعوة الزفاف");
-      setState(STATES.CARD_LIFTED, "المس الدعوة مرة أخرى لفتحها.");
-      setHint("المس لتفتح الحكاية", true);
     } else {
-      body.classList.add("scene-started", "doors-open", "bride-aside", "camera-entered", "approached");
+      body.classList.add("scene-started", "doors-open", "card-presented", "camera-entered", "approached");
       void makeCardReady(token);
     }
   }
@@ -454,7 +438,7 @@ const invitationData = Object.freeze({
 
   window.addEventListener("pointermove", (event) => {
     if (reducedMotion || event.pointerType === "touch" || transitioning || pointerFrame) return;
-    if (![STATES.CARD_READY, STATES.CARD_LIFTED, STATES.INVITATION_ACTIVE].includes(state)) return;
+    if (![STATES.CARD_READY, STATES.INVITATION_ACTIVE].includes(state)) return;
     const x = Math.max(-1, Math.min(1, (event.clientX / window.innerWidth - 0.5) * 2));
     const y = Math.max(-1, Math.min(1, (event.clientY / window.innerHeight - 0.5) * 2));
     pointerFrame = requestAnimationFrame(() => {

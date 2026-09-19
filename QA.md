@@ -6,14 +6,15 @@ Verified locally in headless Chrome on 19 September 2026. These are browser view
 | --- | --- |
 | 360 × 800, 375 × 812, 390 × 844, 393 × 873, 430 × 932 | Complete interaction passes |
 | Desktop, 1440 × 1000 | Entrance, card, invitation, story visually inspected |
-| First tap, followed by five rapid touch events | Card remains lifted; it does not open |
-| Second deliberate tap | Hinged cover opens, foil draws, paper fills viewport, invitation activates |
-| Reduced motion and rapid second activation | Camera journey omitted; two deliberate activations preserved |
+| Automatic presentation | Envelope gently rises from the table as the doors open |
+| One tap, followed by five rapid touch events | Envelope opens once; every following state occurs exactly once |
+| Opening materials | Paper flaps hinge open and warm light appears; no visible writing is painted before the actual invitation |
+| Reduced motion | Camera journey omitted; one deliberate activation opens the invitation |
 | Replay and skip | Correct state reset; no old delayed actions resume |
 | Scroll | Locked before entry; unlocked afterward |
-| Geometry | Pedestal centered; resting card touches its top; inside page stays within mobile width |
-| Camera composition | Bride moves sideways; doors use matrix3d hinge transforms; paper covers the viewport before handoff |
-| Arabic | Names آلاء / ياسر and initials آ / ي checked in DOM and screenshots |
+| Geometry | Oval table and card anchor stay centered; contact shadow remains; the open paper fits mobile width |
+| Camera composition | Bride removed; loaded white floral arch frames hinged doors; cinematic container cannot scroll when the card receives focus |
+| Arabic | Names آلاء / ياسر and initials آ / ي are restricted to the actual invitation and checked in DOM/screenshots |
 | Runtime and network | No console or page errors across the five mobile sizes; assets and fonts served locally |
 | No video | No video element or video playback dependency |
 | Configured sample date | Arabic countdown, HTTPS map, and calendar download pass |
@@ -21,7 +22,7 @@ Verified locally in headless Chrome on 19 September 2026. These are browser view
 
 The event test temporarily overrides the served script. It does not put a sample date or map into the delivered invitation.
 
-On the local test machine, a 644-frame animation sample measured 16.7 ms median and 17.2 ms at the 95th percentile, with eight frames above 50 ms. This is not a guarantee of performance on every phone. Motion uses transforms and opacity, a small number of atmospheric particles, and restrained background blur.
+The revised motion uses transforms and opacity, a small number of atmospheric particles, restrained background blur, and CSS light layers. Physical phone performance has not been measured. The cinematic container uses `overflow: clip` to prevent browser focus scrolling from shifting the entire scene during envelope opening.
 
 `tools/qa.mjs` contains the interaction checks. Run it with Node and the path to an installed Playwright `index.mjs`; it uses an installed Chrome browser. Generated screenshots and raw results stay in the untracked `.qa` directory.
 

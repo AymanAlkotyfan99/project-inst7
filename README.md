@@ -1,6 +1,6 @@
 # Open the door — enter their story
 
-A mobile-first Arabic wedding invitation for آلاء and ياسر, built with HTML, CSS, and vanilla JavaScript. The opening uses separate image and DOM layers, hinged doors, a physical folding card, and a continuous paper transition. No video is embedded, rendered, or played.
+A mobile-first Arabic wedding invitation for آلاء and ياسر, built with HTML, CSS, and vanilla JavaScript. White flowers frame hinged architectural doors. Inside, an embossed invitation rests on an oval stone table, gently rises as the doors open, and waits for one deliberate tap. Its paper flaps open, warm light emerges, and the paper fills the screen to become the invitation website. No video is embedded, rendered, or played.
 
 ## Run locally
 
@@ -21,7 +21,7 @@ The build checks JavaScript syntax and writes the static site to `dist/client`. 
 
 ## Personalize
 
-Edit the single `invitationData` object at the top of `script.js`. Names, initials, phrases, date, time, time zone, venue, city, map link, and optional visual assets are configured there.
+Edit the single `invitationData` object at the top of `script.js`. Names, initials, phrases, date, time, time zone, venue, city, map link, and visual asset paths are configured there.
 
 - Keep `date` and `time` as `null` until confirmed. Set the date to `YYYY-MM-DD` and the time to 24-hour `HH:MM`, interpreted in `timeZone`.
 - Replace the venue and city announcement placeholders with confirmed details.
@@ -29,25 +29,28 @@ Edit the single `invitationData` object at the top of `script.js`. Names, initia
 - A valid date and time reveal the Arabic countdown and downloadable calendar invitation. Unknown or invalid event details show an announcement instead of an invented event.
 - Keep optional asset entries `null` until their files exist. See [the asset guide](assets/README.md) for replacement framing and provenance.
 
-The initial monogram uses the recognizable Arabic initials آ and ي. A supplied calligrapher's SVG can replace it without changing the physical card.
+The recognizable Arabic initials آ and ي appear only in the main invitation footer. A supplied calligrapher's SVG can replace that monogram. The cinematic entrance, embossed cover, floral wax seal, and opening paper contain no visible lettering.
 
 ## Experience and access
 
-The doors open automatically after a short pause. The bride moves aside and the viewer approaches the pedestal. The invitation waits for deliberate interaction:
+The intro has no bride. The closed entrance carries a separate photographic white floral arch; each door leaf rotates around its own hinge. An oval stone tabletop with two legs supports the invitation and its contact shadow.
 
-1. The first tap presses and lifts the card, then stops.
-2. A separate second tap opens the cover and enters the invitation.
-3. Scrolling unlocks after the invitation becomes active.
+1. After a short pause, the doors open automatically.
+2. The invitation gently rises and tilts into view as the camera approaches the table.
+3. In `CARD_READY`, one deliberate tap opens the physical paper flaps. Soft champagne light grows from inside.
+4. The paper transition completes and the invitation's Arabic content appears. Scrolling unlocks only when the invitation becomes active.
 
-Clicks during transitions are ignored; a rapid double tap cannot bypass the lifted state. The card is a native button, supporting pointer input and keyboard activation. A quiet skip control opens the invitation directly, and the footer can replay the experience.
+The opening has no visible instructions, names, initials, or other lettering. Subtle icon-only skip and sound controls retain Arabic accessible labels. State changes have screen-reader announcements. The invitation is a native button supporting touch, mouse, stylus, and keyboard activation; taps during transitions are ignored. The footer can replay the experience.
 
-Reduced-motion preferences bypass the camera journey while preserving the two deliberate card activations. Decorative motion and parallax are suppressed, including when the preference changes during the experience. Focus transfers to the invitation when it opens. Inactive content is inert, state changes have Arabic screen-reader announcements, and the page uses Arabic RTL text without letter spacing on Arabic words.
+Reduced-motion preferences suppress the camera journey and decorative motion while keeping the same single card activation. Changing that preference during a sequence cancels pending animation work safely. Focus transfers to the invitation when it opens. Inactive content is inert, and Arabic RTL text has no letter spacing on Arabic words.
 
 Sound starts disabled. The small sound control enables quiet synthesized material cues only after the visitor activates it. JavaScript is required for the interactive opening; a no-script notice explains this.
 
 ## Assets and delivery
 
-The supplied `bride.webp` is 144,614 bytes (about 141 KiB), including true alpha. The supplied `interior.webp` is 204,118 bytes (about 199 KiB). Together the two photographic layers are about 341 KiB. The reusable `paper-texture.webp` adds about 6 KiB, and the separate social link preview is about 48 KiB. Architecture, pedestal, invitation cover, contact shadow, foil line, and paper transition use DOM/CSS layers so they can move independently.
+The active photographic layers are the interior, transparent floral arch, embossed paper, and transparent floral wax seal. Together with the reusable paper texture, these are about 943 KiB. The social preview is a separate static sharing image. Architecture, door hinges, the oval table, envelope flaps, contact shadow, opening light, and paper transition use independent DOM/CSS layers.
+
+The original `bride.webp` and `social-preview.webp` are retained as retired source assets. The page does not reference or load them. The current social preview is `assets/social-preview-v2.webp`.
 
 Amiri, IBM Plex Sans Arabic, and Cormorant Garamond are bundled as local WOFF2 subsets in `assets/fonts`, with their SIL Open Font License notices. The finished page makes no external font, script, or image requests. `tools/vendor-fonts.mjs` is a one-time maintenance helper; it is not used at runtime.
 

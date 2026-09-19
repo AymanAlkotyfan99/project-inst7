@@ -1,0 +1,45 @@
+Mode: built-in image_gen.imagegen
+Output: assets/floral-arch.webp
+Source dimensions: 1024 x 1536, RGBA. Actual alpha channel range: 0 to 253. Center (512, 800): alpha 0.
+The generated flower frame includes soft transparent green-toned foliage shadows around its edges; its middle is fully transparent.
+
+Use case: photorealistic-natural.
+Asset type: transparent foreground floral arch cutout for a luxury mobile wedding invitation doorway.
+Primary request: one tall elegant wedding floral doorway garland, viewed straight on, made of ivory and soft white garden roses, delicate white hydrangea clusters, tiny white blossoms and sparse subtle muted sage leaves.
+Composition: portrait 2:3 canvas. A graceful semicircular arch across the top and narrow vertical flower columns at the extreme left and right edges. Entire arch visible. Keep the central 70 percent of image width EMPTY and transparent, extending from under the floral arch down to the bottom edge. Keep the lower opening completely empty. Flowers occupy mostly outer 10 to 15 percent of canvas sides and top 15 percent. Bottom flowers terminate at bottom edges. Elegant restrained arrangement with natural asymmetry in individual blooms, balanced overall.
+Lighting: soft warm wedding architectural light from front and above, delicate shadows within blossoms, quiet ivory palette, realistic photographic floral detail.
+Backdrop: actual transparent alpha background everywhere behind and between flowers, including the entire middle opening. Isolated cutout for layering over architecture. This must be a genuinely transparent image, not a checkerboard graphic.
+Constraints: flowers and a few leaves ONLY. No background, no wall, no doorway, no architecture, no flooring, no person, no bride, no vase, no text, no watermark, no drawn border, no illustration. No pink flowers, no bright yellow gold.
+
+
+Built-in image_gen asset generation. Created 2026-09-19.
+
+EMBOSSED PAPER
+Use case: product-mockup.
+Asset type: Photorealistic material texture for a premium Arabic wedding invitation website. This is ONLY a flat full-bleed paper material, NOT a finished mockup.
+Primary request: Portrait 2:3 aspect ratio photograph scanned straight-on of luxurious warm ivory/light cream cotton paper with extremely beautiful raised blind-embossed botanical rosettes, little leaves and delicate arabesque flowering sprays clustered in the top corners and bottom corners, with a small airy central upper floral medallion and a larger delicate lower botanical motif. The middle central region must remain calm, empty paper suitable for another layer to sit on. The user style reference is rich textured blush ivory wedding stationery with raised flower patterns; use warm light cream instead of pink.
+Composition: Paper fills the entire frame to all four edges. Even flat plane, no visible exterior paper edge, no perspective, no table/background. Fine tactile grain and convincing luxurious sculpted low relief, not flat illustration.
+Lighting: Gentle studio light from upper-left, enough subtle directional shadow to show each tiny raised leaf and flower. Soft, elegant, physical embossing in the SAME ivory color as paper.
+Color palette: #F4EFE7 ivory, #E8DDD0 warm cream with only subtle champagne shading. NO pink overall.
+Constraints: Absolutely NO text, letters, numbers, Arabic, calligraphy, logos, watermark, writing, seal, monogram, ribbon, envelope folds or diagonal fold lines. No phone, screen, frame, hand, or other object. Only beautiful embossed paper texture.
+
+WAX SEAL
+Use case: product-mockup.
+Asset type: Isolated transparent PNG compositing asset for premium wedding invitation.
+Primary request: One exquisite circular antique champagne-gold wax seal, perfectly straight-on face view, square composition. The seal should fill about 85 percent of the frame. Rich slightly organic rippled melted-wax circular outer rim, a fine raised concentric ring border, and a sculpted botanical rosette/arabesque design in the center with clearly raised tiny petals and curling leaf stems. The central symbol must be purely floral ornament, NOT calligraphy.
+Material: Champagne-gold subtly metallic wax, physically convincing soft satiny reflectance with deep antique gold shadows and light cream gold highlights, no yellow gold glare. Thick relief seal seen straight-on, clean edges.
+Lighting: Soft studio top-left light with soft shadows that are part of the wax relief.
+Background: Genuinely transparent background with clean alpha, no checkerboard, no solid background, no paper, no envelope, no cast shadow outside the seal.
+Constraints: NO text, NO letters, NO numbers, NO Arabic or English calligraphy, NO monogram, NO logo or watermark, no phone, no hands. Decorative floral rosette ONLY.
+
+
+
+Created with built-in image_gen. Optimized to 1200x628 WebP.
+
+Use case: product-mockup.
+Asset type: Wide landscape Open Graph social preview photograph for a luxurious cinematic wedding invitation website.
+Primary request: One refined cream ivory portrait-format wedding envelope resting physically on the center of a beautiful oval ivory stone table. The envelope is the sharp central hero in the lower-middle composition, comfortably large and clearly recognizable. Its premium cotton paper has beautiful raised blind-embossed floral rosettes, delicate botanical leaf sprays and tiny flowers in all corners and along lower edge, the same color as the paper. A prominent folded triangular top flap meets the center and is held closed by a circular champagne antique-gold wax seal bearing ONLY an intricate raised botanical rosette. This seal has a slightly organic wax rim and absolutely no writing or monogram.
+Background: An elegant softly focused neoclassical hall in warm ivory stone and deep warm brown shadows. Tall architectural arches and refined columns, distant central double doorway with abundant elegant white roses and soft creamy flowers framing both sides of the doorway. No people. The room has depth and subtle cinematic lighting with warm champagne wall-sconce highlights.
+Composition: Wide horizontal landscape image 1.91:1 aspect ratio, approximately 1200x628 proportions. Three-quarter slightly elevated photographic view of the table and envelope, the envelope fully visible and resting naturally on the tabletop, subtle contact shadows. Luxurious editorial product photography. Emphasize actual embossed paper relief and tactile satin wax, shallow depth of field behind the envelope, restrained realistic champagne illumination.
+Palette: Warm ivory #F4EFE7, cream #E8DDD0, muted champagne #CDB58E, antique gold #A98A60, warm stone. No overt pink. Do not use bright yellow gold.
+Constraints: ABSOLUTELY NO TEXT ANYWHERE. No letters, no numbers, no words, no Arabic, no calligraphy, no initials, no monogram, no watermark. No person, bride, hand, phone, screen, UI, border, frame, floating object, glitter, sparkles, hearts or fantasy. Exactly one envelope on one oval ivory stone table.
