@@ -1,0 +1,16 @@
+Generated using the built-in image_gen tool (one generation; no retries).
+Date: 2026-09-19
+Original: C:/Users/Ayman/.codex/generated_images/01a0bafa-9efd-7a92-80ca-9994241d741a/exec-478bef05-ae36-4bb0-8764-c09295903e28.png
+Purpose: Social preview for wedding invitation redesign.
+Validation: Exact Arabic and English text checked visually; no names, dates, people, or table.
+
+Exact prompt:
+Use case: ads-marketing
+Asset type: original landscape social sharing preview for an elegant Arabic wedding invitation website, approximately 1200 by 628 proportion (1.91:1).
+Primary request: a refined, romantic editorial composition of a floating embossed ivory wedding envelope with an antique gold wax seal, surrounded by a few white roses, subtle sage foliage and delicately falling ivory rose petals.
+Scene/backdrop: luminous cream and ivory atmospheric space, no table, no visible surface beneath the suspended envelope.
+Composition/framing: wide landscape image with a central quiet area for beautifully readable Arabic typography; envelope placed in the lower central area; white roses and sage greenery gently frame the lower corners and outer edges; generous sophisticated negative space.
+Style/medium: exceptionally polished photographic luxury stationery art direction, understated tactile detail, soft natural light, delicate shadows and subtle depth.
+Color palette: warm ivory, cream, muted sage and restrained antique gold.
+Text (verbatim): main centered headline "دعوة إلى حكايتنا" in dark olive elegant flowing Arabic calligraphy, correctly connected letters and readable; a much smaller centered uppercase English line below it "A BEAUTIFUL BEGINNING" in refined widely spaced serif lettering.
+Constraints: only those two text lines; accurate Arabic text; no names, no dates, no numbers, no people, no tabletop, no watermark, no frame; avoid busy decoration or bright colors.

@@ -11,18 +11,24 @@ const invitationData = Object.freeze({
   groomName: "ياسر",
   brideInitial: "آ",
   groomInitial: "ي",
-  date: null,
-  time: null,
+  date: "2026-08-30",
+  time: "17:00",
   timeZone: "Asia/Damascus",
-  venue: "المكان… بداية الحكاية",
-  city: "سيُعلن قريبًا",
-  mapsUrl: null,
+  venue: "إيليت بلازا",
+  city: null,
+  mapsUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("إيليت بلازا"),
   openingPhrase: "ومن بين كل الحكايات... بدأت حكايتنا",
-  closingPhrase: "بانتظاركم لتكتمل الحكاية",
+  closingPhrase: "بعض الليالي تُعاش مرة… وتبقى في القلب عمرًا",
+  // Replace these images with your own photographs whenever you wish.
+  photos: Object.freeze([
+    Object.freeze({ src: "assets/gallery-roses.webp", width: 1200, height: 800, alt: "ورود عاجية بتفاصيل ناعمة", title: "تفاصيل تشبه الحب", caption: "وفي كل تفصيلة… شيءٌ من فرحتنا" }),
+    Object.freeze({ src: "assets/gallery-garden.webp", width: 1200, height: 900, alt: "ورود حديقة كريمية بين أوراق خضراء داكنة", title: "حكاية تزهر", caption: "للحكايات الجميلة أماكن تشبهها" }),
+    Object.freeze({ src: "assets/gallery-ceremony.webp", width: 1200, height: 798, alt: "تنسيق زفاف أنيق بين الزهور والضوء", title: "ليلة من العمر", caption: "وكل ما نتمناه… أن تكونوا معنا" })
+  ]),
   // Milliseconds: a deliberate seal release, slow unfolding, sunlight, then entry.
   motion: Object.freeze({ sealRelease: 650, opening: 3400, sunlightHold: 2300, entry: 2500 }),
   // Optional assets are requested only when their path is configured.
-  // Transparent door/pedestal assets should be tightly cropped to their object.
+  // Transparent door assets should be tightly cropped to their object.
   assets: Object.freeze({
     interior: "assets/interior.webp",
     floralArch: "assets/floral-arch.webp",
@@ -30,7 +36,6 @@ const invitationData = Object.freeze({
     waxSeal: "assets/wax-seal.webp",
     doorLeft: null,
     doorRight: null,
-    pedestal: null,
     paperTexture: "assets/paper-texture.webp",
     monogram: null,
     hand: null
@@ -66,7 +71,7 @@ const invitationData = Object.freeze({
     DOOR_SCENE: "DOOR_SCENE",
     DOOR_OPENING: "DOOR_OPENING",
     CAMERA_ENTERING: "CAMERA_ENTERING",
-    PEDESTAL_APPROACH: "PEDESTAL_APPROACH",
+    CARD_APPROACH: "CARD_APPROACH",
     CARD_READY: "CARD_READY",
     CARD_PRESENTING: "CARD_PRESENTING",
     CARD_OPENING: "CARD_OPENING",
@@ -86,7 +91,9 @@ const invitationData = Object.freeze({
   let soundEnabled = false;
   let activationGateUntil = 0;
   let optionalHand = null;
+  let updateGallery = () => {};
   const waits = new Map();
+  const invitationTitle = "دعوة إلى حكاية جميلة | لتكتمل الحكاية";
 
   // Every delayed action belongs to one run. Skipping, replaying, and a motion
   // preference change cancel pending actions, including interaction hints.
@@ -214,13 +221,6 @@ const invitationData = Object.freeze({
         Object.assign(image.style, { objectFit: "fill", borderRadius: "inherit", zIndex: "2" });
       }
     });
-    const pedestal = document.querySelector(".pedestal");
-    const pedestalImage = appendAsset(pedestal, assets.pedestal, "pedestal-asset", () => {
-      pedestal.classList.add("has-pedestal-asset");
-      pedestal.querySelectorAll(".pedestal-top, .pedestal-cap, .table-leg")
-        .forEach((part) => { part.hidden = true; });
-    });
-    if (pedestalImage) Object.assign(pedestalImage.style, { top: "-8px", objectFit: "fill", zIndex: "2" });
     document.querySelectorAll(".monogram").forEach((monogram) => {
       const image = appendAsset(monogram, assets.monogram, "monogram-asset", () => {
         monogram.querySelectorAll("[data-bind]").forEach((letter) => { letter.hidden = true; });
@@ -274,6 +274,12 @@ const invitationData = Object.freeze({
 
   function prepareScene() {
     body.classList.add("resetting");
+    if (revealObserver) revealObserver.disconnect();
+    invitation.querySelectorAll(".reveal").forEach((section) => section.classList.remove("revealed"));
+    invitation.querySelectorAll(".names-reveal").forEach((section) => section.setAttribute("aria-hidden", "true"));
+    const names = document.getElementById("couple-names");
+    if (names) names.setAttribute("aria-label", "حكاية قلبين");
+    document.title = invitationTitle;
     const previousScrollBehavior = document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "auto";
     window.scrollTo(0, 0);
@@ -303,7 +309,7 @@ const invitationData = Object.freeze({
     if (token !== epoch) return;
     transitioning = false;
     card.disabled = false;
-    card.setAttribute("aria-label", `افتح دعوة زفاف ${invitationData.brideName} و${invitationData.groomName}`);
+    card.setAttribute("aria-label", "افتح دعوة الزفاف");
     setState(STATES.CARD_READY, "الدعوة أمامك. المس الختم لفتحها.");
     if (await wait(1300, token)) {
       if (state === STATES.CARD_READY && !transitioning) setHint("", true);
@@ -336,7 +342,7 @@ const invitationData = Object.freeze({
     setState(STATES.CAMERA_ENTERING);
     body.classList.add("camera-entered");
     if (!(await wait(1800, token))) return;
-    setState(STATES.PEDESTAL_APPROACH);
+    setState(STATES.CARD_APPROACH);
     body.classList.add("approached");
     if (!(await wait(1400, token))) return;
     await makeCardReady(token);
@@ -392,6 +398,7 @@ const invitationData = Object.freeze({
     setState(STATES.INVITATION_ACTIVE, "أهلًا بكم في حكايتنا. يمكنكم الآن التمرير لقراءة الدعوة.");
     resetPointer();
     revealSections();
+    requestAnimationFrame(updateGallery);
     if (await wait(reducedMotion ? 260 : 1100, token)) cinematic.hidden = true;
   }
 
@@ -428,6 +435,7 @@ const invitationData = Object.freeze({
   function handleMotionChange(event) {
     reducedMotion = event.matches;
     body.classList.toggle("reduced-motion", reducedMotion);
+    updatePetalMotion();
     resetPointer();
     if (!reducedMotion || state === STATES.INVITATION_ACTIVE) {
       if (reducedMotion) revealSections();
@@ -464,19 +472,221 @@ const invitationData = Object.freeze({
   function revealSections() {
     if (revealObserver) revealObserver.disconnect();
     const sections = invitation.querySelectorAll(".reveal");
-    if (reducedMotion || !("IntersectionObserver" in window)) {
-      sections.forEach((section) => section.classList.add("revealed"));
+    const reveal = (section) => {
+      section.classList.add("revealed");
+      if (section.matches(".names-reveal")) {
+        section.removeAttribute("aria-hidden");
+        const names = document.getElementById("couple-names");
+        if (names) names.setAttribute("aria-label", `${invitationData.brideName} و${invitationData.groomName}`);
+        document.title = `${invitationData.brideName} و${invitationData.groomName} | لتكتمل الحكاية`;
+      }
+    };
+    if (!("IntersectionObserver" in window)) {
+      sections.forEach(reveal);
       return;
     }
     revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("revealed");
+        if (entry.isIntersecting && state === STATES.INVITATION_ACTIVE) {
+          reveal(entry.target);
           revealObserver.unobserve(entry.target);
         }
       });
     }, { threshold: 0.13, rootMargin: "0px 0px -24px 0px" });
     sections.forEach((section) => revealObserver.observe(section));
+  }
+
+  function initializeGallery() {
+    const track = document.getElementById("photo-gallery");
+    if (!track) return;
+    const dots = document.getElementById("gallery-dots");
+    const previous = document.getElementById("gallery-prev");
+    const next = document.getElementById("gallery-next");
+    const current = document.getElementById("gallery-current");
+    const total = document.getElementById("gallery-total");
+    const status = document.getElementById("gallery-status");
+    const photos = invitationData.photos.filter((photo) => photo && assetUrl(photo.src));
+    const number = (value) => String(value).padStart(2, "0");
+    const slides = [];
+    const dotButtons = [];
+    let activeIndex = 0;
+    let requestedIndex = null;
+    let scrollFrame = 0;
+    let settleTimer = 0;
+
+    track.replaceChildren();
+    if (dots) dots.replaceChildren();
+    track.dir = "ltr";
+    track.tabIndex = 0;
+    track.setAttribute("role", "region");
+    track.setAttribute("aria-roledescription", "معرض صور");
+    if (!track.hasAttribute("aria-label")) track.setAttribute("aria-label", "صور من أجواء حكايتنا");
+    if (status) {
+      status.setAttribute("aria-live", "polite");
+      status.setAttribute("aria-atomic", "true");
+    }
+
+    photos.forEach((photo, index) => {
+      const slide = document.createElement("figure");
+      slide.className = "gallery-slide";
+      slide.id = `gallery-photo-${index + 1}`;
+      slide.setAttribute("role", "group");
+      slide.setAttribute("aria-roledescription", "صورة");
+      slide.setAttribute("aria-label", `${index + 1} من ${photos.length}`);
+      const picture = document.createElement("img");
+      picture.className = "gallery-image";
+      picture.alt = photo.alt || "تفاصيل من أجواء الزفاف";
+      picture.width = photo.width || 1200;
+      picture.height = photo.height || 1500;
+      picture.loading = "lazy";
+      picture.decoding = "async";
+      picture.draggable = false;
+      picture.addEventListener("load", () => slide.classList.add("image-loaded"), { once: true });
+      picture.addEventListener("error", () => slide.classList.add("image-unavailable"), { once: true });
+      picture.src = assetUrl(photo.src);
+
+      const caption = document.createElement("figcaption");
+      caption.className = "gallery-caption";
+      caption.dir = "rtl";
+      const indexLabel = document.createElement("span");
+      indexLabel.className = "gallery-index";
+      indexLabel.textContent = number(index + 1);
+      indexLabel.setAttribute("aria-hidden", "true");
+      const title = document.createElement("h3");
+      title.className = "gallery-title";
+      title.textContent = photo.title || "من حكايتنا";
+      const note = document.createElement("p");
+      note.className = "gallery-note";
+      note.textContent = photo.caption || "";
+      caption.append(indexLabel, title, note);
+      slide.append(picture, caption);
+      track.append(slide);
+      slides.push(slide);
+
+      if (dots) {
+        const dot = document.createElement("button");
+        dot.className = "gallery-dot";
+        dot.type = "button";
+        dot.setAttribute("aria-label", `انتقل إلى الصورة ${index + 1}: ${photo.title || "من حكايتنا"}`);
+        dot.setAttribute("aria-controls", slide.id);
+        dot.addEventListener("click", () => goTo(index));
+        dots.append(dot);
+        dotButtons.push(dot);
+      }
+    });
+
+    const targetPosition = (index) => {
+      const slide = slides[index];
+      if (!slide) return 0;
+      // Layout offsets stay stable while the active image scales visually.
+      const padding = parseFloat(window.getComputedStyle(track).paddingLeft) || 0;
+      const left = slide.offsetLeft - slides[0].offsetLeft + padding
+        - (track.clientWidth - slide.offsetWidth) / 2;
+      return Math.max(0, Math.min(left, track.scrollWidth - track.clientWidth));
+    };
+
+    const announce = () => {
+      if (status && photos[activeIndex]) {
+        status.textContent = `الصورة ${activeIndex + 1} من ${photos.length}، ${photos[activeIndex].title || "من حكايتنا"}`;
+      }
+    };
+
+    const renderPosition = () => {
+      if (current) current.textContent = number(slides.length ? activeIndex + 1 : 0);
+      if (total) total.textContent = number(slides.length);
+      if (previous) previous.disabled = activeIndex === 0 || !slides.length;
+      if (next) next.disabled = activeIndex === slides.length - 1 || !slides.length;
+      slides.forEach((slide, index) => slide.classList.toggle("is-active", index === activeIndex));
+      dotButtons.forEach((dot, index) => {
+        dot.classList.toggle("is-active", index === activeIndex);
+        if (index === activeIndex) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+    };
+
+    updateGallery = () => {
+      if (!track.clientWidth || !slides.length) return;
+      let nearest = 0;
+      let distance = Infinity;
+      slides.forEach((slide, index) => {
+        const offset = Math.abs(targetPosition(index) - track.scrollLeft);
+        if (offset < distance) {
+          distance = offset;
+          nearest = index;
+        }
+      });
+      activeIndex = nearest;
+      renderPosition();
+    };
+
+    function goTo(index, immediate = false) {
+      if (!slides.length) return;
+      activeIndex = Math.max(0, Math.min(index, slides.length - 1));
+      requestedIndex = activeIndex;
+      track.scrollTo({ left: targetPosition(activeIndex), behavior: reducedMotion || immediate ? "instant" : "smooth" });
+      renderPosition();
+      announce();
+    }
+
+    track.addEventListener("scroll", () => {
+      if (!scrollFrame) {
+        scrollFrame = requestAnimationFrame(() => {
+          scrollFrame = 0;
+          updateGallery();
+        });
+      }
+      window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(() => {
+        requestedIndex = null;
+        updateGallery();
+        announce();
+      }, 180);
+    }, { passive: true });
+    track.addEventListener("pointerdown", () => { requestedIndex = null; }, { passive: true });
+    track.addEventListener("keydown", (event) => {
+      const navigationIndex = requestedIndex ?? activeIndex;
+      const destinations = { ArrowLeft: navigationIndex - 1, ArrowRight: navigationIndex + 1, Home: 0, End: slides.length - 1 };
+      if (!Object.prototype.hasOwnProperty.call(destinations, event.key)) return;
+      event.preventDefault();
+      goTo(destinations[event.key]);
+    });
+    if (previous) previous.addEventListener("click", () => goTo((requestedIndex ?? activeIndex) - 1));
+    if (next) next.addEventListener("click", () => goTo((requestedIndex ?? activeIndex) + 1));
+    let previousWidth = 0;
+    const resize = () => {
+      if (!track.clientWidth || track.clientWidth === previousWidth) return;
+      previousWidth = track.clientWidth;
+      goTo(activeIndex, true);
+    };
+    if ("ResizeObserver" in window) new ResizeObserver(resize).observe(track);
+    else window.addEventListener("resize", resize, { passive: true });
+    renderPosition();
+  }
+
+  function updatePetalMotion() {
+    const field = document.getElementById("petal-field");
+    if (!field) return;
+    field.classList.toggle("petals-paused", reducedMotion || document.hidden);
+    field.hidden = reducedMotion;
+  }
+
+  function initializePetals() {
+    const field = document.getElementById("petal-field");
+    if (!field) return;
+    const fragment = document.createDocumentFragment();
+    for (let index = 0; index < 16; index += 1) {
+      const petal = document.createElement("i");
+      petal.className = "petal";
+      petal.style.setProperty("--x", `${(index / 16 * 100 + Math.random() * 6).toFixed(2)}vw`);
+      petal.style.setProperty("--size", `${(7 + Math.random() * 8).toFixed(2)}px`);
+      petal.style.setProperty("--duration", `${(17 + Math.random() * 15).toFixed(2)}s`);
+      petal.style.setProperty("--delay", `${(-Math.random() * 32).toFixed(2)}s`);
+      petal.style.setProperty("--drift", `${(-70 + Math.random() * 140).toFixed(2)}px`);
+      petal.style.setProperty("--rotation", `${(120 + Math.random() * 400).toFixed(2)}deg`);
+      fragment.append(petal);
+    }
+    field.replaceChildren(fragment);
+    updatePetalMotion();
   }
 
   function validEventDate() {
@@ -514,7 +724,7 @@ const invitationData = Object.freeze({
         element.textContent = invitationData[key] ?? "";
       }
     });
-    document.title = `${invitationData.brideName} و${invitationData.groomName} | لتكتمل الحكاية`;
+    document.title = invitationTitle;
     const eventDate = validEventDate();
     const dateDisplay = document.getElementById("date-display");
     const timeDisplay = document.getElementById("time-display");
@@ -525,15 +735,18 @@ const invitationData = Object.freeze({
     const mapLink = document.getElementById("map-link");
     const saveDate = document.getElementById("save-date");
     if (venueDisplay) venueDisplay.textContent = invitationData.venue || "المكان… بداية الحكاية";
-    if (cityDisplay) cityDisplay.textContent = invitationData.city || "سيُعلن قريبًا";
+    if (cityDisplay) {
+      cityDisplay.textContent = invitationData.city || "";
+      cityDisplay.hidden = !invitationData.city;
+    }
     if (dateDisplay) dateDisplay.textContent = eventDate
       ? new Intl.DateTimeFormat("ar-SY", { timeZone: invitationData.timeZone, day: "numeric", month: "long", year: "numeric" }).format(eventDate)
-      : "موعدٌ نترقّبه";
+      : "نعلن التاريخ قريبًا";
     if (timeDisplay) {
-      timeDisplay.hidden = !eventDate;
+      timeDisplay.hidden = false;
       timeDisplay.textContent = eventDate
         ? new Intl.DateTimeFormat("ar-SY", { timeZone: invitationData.timeZone, hour: "numeric", minute: "2-digit" }).format(eventDate)
-        : "";
+        : "نعلن الساعة قريبًا";
     }
     if (pending) {
       pending.hidden = Boolean(eventDate);
@@ -566,8 +779,8 @@ const invitationData = Object.freeze({
   function initializeCountdown(eventDate) {
     const countdown = document.getElementById("countdown");
     if (!countdown) return;
-    countdown.hidden = !eventDate;
-    if (!eventDate) return;
+    countdown.hidden = !eventDate || eventDate.getTime() <= Date.now();
+    if (countdown.hidden) return;
     const units = [
       ["days", "يوم"], ["hours", "ساعة"], ["minutes", "دقيقة"], ["seconds", "ثانية"]
     ];
@@ -600,6 +813,7 @@ const invitationData = Object.freeze({
         ? `بقي ${numbers.format(remaining.days)} يوم و${numbers.format(remaining.hours)} ساعة على موعدنا`
         : "حلّ يوم حكايتنا");
       if (!seconds && countdownTimer) {
+        countdown.hidden = true;
         window.clearInterval(countdownTimer);
         countdownTimer = null;
       }
@@ -704,6 +918,7 @@ const invitationData = Object.freeze({
   }
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) resetPointer();
+    updatePetalMotion();
   });
 
   // A small read-only diagnostic surface for browser QA and integration.
@@ -721,6 +936,8 @@ const invitationData = Object.freeze({
   });
 
   updateInvitationDetails();
+  initializeGallery();
+  initializePetals();
   configureAssets();
   void runOpening();
 })();

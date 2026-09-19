@@ -4,16 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#171310">
-  <meta name="description" content="دعوة إلى حكاية حب، تُفتح أبوابها بحضوركم.">
+  <meta name="description" content="دعوة إلى حكاية حب تزهر بحضوركم. ٣٠ آب ٢٠٢٦، الخامسة مساءً، إيليت بلازا.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ar_AR">
   <meta property="og:title" content="دعوة إلى حكايتنا">
-  <meta property="og:description" content="افتح الباب… وادخل الحكاية. دعوة زفاف بتجربة تفاعلية.">
+  <meta property="og:description" content="ولنا في الحبّ حكاية. افتحوا الدعوة، واكتشفوا تفاصيل ليلةٍ من العُمر.">
   <meta property="og:url" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site">
-  <meta property="og:image" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site/assets/social-preview-v2.webp">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="628">
+  <meta property="og:image" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site/assets/social-preview-v3.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1734">
+  <meta property="og:image:height" content="907">
+  <meta property="og:image:alt" content="دعوة إلى حكايتنا، ظرف عاجي معلّق بين الورد والبتلات">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="دعوة إلى حكايتنا">
+  <meta name="twitter:description" content="ولنا في الحبّ حكاية. دعوة إلى ليلةٍ تشبه الحلم.">
+  <meta name="twitter:image" content="https://a-door-to-our-story.ayman-alkotyfan.chatgpt.site/assets/social-preview-v3.png">
   <title>دعوة إلى حكايتنا</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
@@ -24,6 +29,7 @@
 </head>
 <body data-state="LOADING">
   <div id="live-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div id="petal-field" class="petal-field" aria-hidden="true"></div>
 
   <div id="cinematic" class="cinematic" aria-label="مشهد الدخول إلى الدعوة">
     <div class="scene-room" aria-hidden="true">
@@ -34,14 +40,9 @@
     </div>
 
     <div class="object-rig">
-      <div class="pedestal" aria-hidden="true">
-        <div class="pedestal-top"></div>
-        <div class="pedestal-cap"></div>
-        <div class="table-leg table-leg-left"></div>
-        <div class="table-leg table-leg-right"></div>
-        <div class="table-floor-shadow"></div>
-        <div class="pedestal-contact"></div>
-      </div>
+      <div class="floating-halo" aria-hidden="true"><i></i><i></i></div>
+      <div class="floating-bloom bloom-left" aria-hidden="true"></div>
+      <div class="floating-bloom bloom-right" aria-hidden="true"></div>
       <div class="card-anchor">
         <div class="card-lift">
           <button id="invitation-card" class="invitation-card" type="button" disabled aria-label="افتح دعوة الزفاف">
@@ -90,53 +91,69 @@
 
   <main id="invitation" class="invitation paper" inert>
     <section class="invitation-hero" aria-labelledby="invitation-title">
-      <div class="paper-plane plane-left" aria-hidden="true"></div>
-      <div class="paper-plane plane-right" aria-hidden="true"></div>
-      <div class="hero-topline"><span lang="en" dir="ltr">A STORY WRITTEN FOR US</span><span>دعوة زفاف</span></div>
+      <img class="hero-floral-photo" src="assets/gallery-roses.webp" alt="" decoding="async" aria-hidden="true">
+      <div class="hero-topline"><span lang="en" dir="ltr">A BEAUTIFUL BEGINNING</span><span>دعوة بكلّ الحب</span></div>
       <div class="hero-arch" aria-hidden="true"></div>
       <div class="hero-center">
-        <p class="eyebrow">بكلّ الحبّ، ندعوكم</p>
-        <h1 id="invitation-title" class="hero-names" tabindex="-1"><span data-bind="brideName"></span><em>و</em><span data-bind="groomName"></span></h1>
+        <span class="hero-kicker" lang="en" dir="ltr">THE WEDDING INVITATION</span>
+        <p class="eyebrow">ثمّ يُزهر العُمر، بلقاءٍ واحد.</p>
+        <h1 id="invitation-title" class="prologue-title" tabindex="-1">ولنا في الحبّ<br><em>حكاية.</em></h1>
         <div class="fine-rule" aria-hidden="true"><i></i><span>✧</span><i></i></div>
-        <p class="hero-phrase" data-bind="openingPhrase"></p>
-        <p class="hero-note">لتكونوا جزءًا من أجمل فصولها</p>
+        <p class="hero-note">دعوة إلى ليلةٍ تشبه الحلم<br>وإلى فرحةٍ لا تكتمل إلّا بكم.</p>
       </div>
-      <a id="scroll-cue" class="scroll-cue" href="#our-story"><span>للحكاية بقية</span><i aria-hidden="true"></i></a>
-      <div class="hero-edition" lang="en" dir="ltr">TOGETHER, A BEAUTIFUL BEGINNING</div>
+      <a id="scroll-cue" class="scroll-cue" href="#our-story"><span>اكتشفوا الحكاية</span><i aria-hidden="true"></i></a>
+      <div class="hero-edition" lang="en" dir="ltr">A LITTLE MAGIC. A LIFETIME OF LOVE.</div>
     </section>
 
-    <section id="our-story" class="story-section">
-      <div class="story-number reveal" aria-hidden="true" lang="en">I.</div>
-      <div class="story-copy reveal">
-        <span class="section-label">الحكاية</span>
-        <h2>بعض اللقاءات<br>تُغيّر <em>العُمر.</em></h2>
-        <p>ثم يأتي شخصٌ واحد،<br>فتصبح كلّ الطرق إليه،<br>وكلّ الأيام بدايةً لحياةٍ أجمل.</p>
-        <span class="story-signature">وهكذا، بدأت حكايتنا.</span>
+    <section id="our-story" class="names-section" aria-labelledby="couple-names">
+      <div class="names-ornament" aria-hidden="true"><span></span>✧<span></span></div>
+      <div class="names-reveal reveal">
+        <p class="section-label">قلبان، وحكايةٌ واحدة</p>
+        <h2 id="couple-names" class="hero-names"><span data-bind="brideName"></span><em>و</em><span data-bind="groomName"></span></h2>
+        <p class="names-verse" data-bind="openingPhrase"></p>
+        <p class="names-invitation">بكلّ الحب والامتنان، ندعوكم لمشاركتنا حفل زفافنا.<br>لأنّ أجمل البدايات، هي التي نجتمع فيها بمن نحبّ.</p>
       </div>
-      <figure class="architecture-detail reveal"><img src="assets/interior.webp" alt="أقواس حجرية مضاءة بنور دافئ" loading="lazy" decoding="async"><figcaption lang="en" dir="ltr">EVERY PATH LED TO YOU</figcaption></figure>
+      <span class="names-footnote" lang="en" dir="ltr">TWO SOULS. ONE BEAUTIFUL STORY.</span>
     </section>
 
-    <section id="event-details" class="event-section">
-      <div class="event-heading reveal"><span class="section-label">موعدٌ مع الفرح</span><h2>يومٌ لنا.<br><em>وذكرى تجمعنا.</em></h2></div>
-      <div class="event-body reveal">
-        <p class="event-intro">بحضوركم يصبح الفرح أجمل،<br>وتكتمل تفاصيل هذا اليوم.</p>
-        <div class="date-composition"><span class="detail-label">التاريخ</span><p id="date-display">سنعلن موعد الحكاية قريبًا</p><p id="time-display"></p></div>
-        <p id="event-pending" class="pending-note">نحتفظ لكم بمكانٍ في حكايتنا.<br>تفاصيل الموعد والمكان تُضاف قريبًا.</p>
-        <button id="save-date" class="text-link" type="button" hidden>احفظوا الموعد <span aria-hidden="true">↗</span></button>
+    <section id="moments" class="gallery-section" aria-labelledby="gallery-heading">
+      <div class="section-heading reveal"><span class="section-label">شيءٌ من سحر الليلة</span><h2 id="gallery-heading">تفاصيل صغيرة،<br><em>وشعورٌ كبير.</em></h2><p>وردٌ، ضوءٌ، والكثير من الحبّ.</p></div>
+      <div class="gallery-shell">
+        <div id="photo-gallery" class="gallery-track" tabindex="0" role="region" aria-roledescription="معرض صور" aria-label="صور من أجواء الدعوة، اسحبوا للتنقّل"></div>
+        <div class="gallery-controls">
+          <div class="gallery-arrows" dir="ltr"><button id="gallery-prev" class="round-button" type="button" aria-label="الصورة السابقة" aria-controls="photo-gallery">←</button><button id="gallery-next" class="round-button" type="button" aria-label="الصورة التالية" aria-controls="photo-gallery">→</button></div>
+          <div id="gallery-dots" class="gallery-dots" dir="ltr" aria-label="اختيار صورة"></div>
+          <span class="gallery-count" dir="ltr"><span id="gallery-current">01</span><i>/</i><span id="gallery-total">03</span></span>
+        </div>
+        <p class="gallery-hint">اسحبوا الصور، واكتشفوا التفاصيل <span aria-hidden="true">↔</span></p>
+        <p id="gallery-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
       </div>
+    </section>
+
+    <section id="event-details" class="event-section" aria-labelledby="event-heading">
+      <div class="section-heading reveal"><span class="section-label">موعدٌ مع الفرح</span><h2 id="event-heading">ليلةٌ من العُمر.<br><em>أنتم أجمل تفاصيلها.</em></h2><p>كلّ ما تحتاجونه، لتكونوا بالقرب من فرحتنا.</p></div>
+      <div class="event-grid">
+        <div class="event-detail reveal"><span class="detail-icon icon-calendar" aria-hidden="true"></span><span class="detail-label">التاريخ</span><p id="date-display">نعلن التاريخ قريبًا</p><span class="detail-footnote" lang="en" dir="ltr">SAVE THE DATE</span></div>
+        <div class="event-detail reveal"><span class="detail-icon icon-clock" aria-hidden="true"></span><span class="detail-label">الوقت</span><p id="time-display">نعلن الساعة قريبًا</p><span class="detail-footnote">تبدأ الليلة، وتبقى الذكرى</span></div>
+        <div class="event-detail reveal"><span class="detail-icon icon-location" aria-hidden="true"></span><span class="detail-label">المكان</span><h3 id="venue-display"></h3><p id="city-display"></p><a id="map-link" class="text-link" target="_blank" rel="noopener noreferrer" hidden>ابحثوا عن القاعة على الخريطة <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <p id="event-pending" class="pending-note">تفاصيل الليلة تُضاف قريبًا.</p>
+      <button id="save-date" class="save-date-button" type="button" hidden>أضيفوا الموعد إلى التقويم <span aria-hidden="true">↗</span></button>
       <div id="countdown" class="countdown" hidden aria-label="الوقت المتبقي حتى موعد الزفاف"></div>
     </section>
 
-    <section class="venue-section">
-      <div class="venue-visual reveal" aria-hidden="true"><div class="venue-arch"></div><div class="venue-arch arch-two"></div><span lang="en" dir="ltr">WHERE OUR<br><em>forever</em><br>BEGINS</span></div>
-      <div class="venue-copy reveal"><span class="section-label">هنا، نلتقي</span><h2 id="venue-display"></h2><p id="city-display"></p><div class="venue-rule"></div><p>خطواتكم إلى فرحنا،<br>هي أجمل ما ننتظر.</p><a id="map-link" class="text-link" target="_blank" rel="noopener noreferrer" hidden>الطريق إلى الفرح <span aria-hidden="true">↗</span></a></div>
-    </section>
-
     <footer class="closing-section">
-      <div class="closing-monogram monogram" aria-hidden="true"><span class="monogram-bride" data-bind="brideInitial"></span><span class="monogram-groom" data-bind="groomInitial"></span></div>
-      <p class="closing-phrase reveal" data-bind="closingPhrase"></p>
-      <p class="closing-names"><span data-bind="brideName"></span><span>و</span><span data-bind="groomName"></span></p>
-      <div class="footer-bottom"><span lang="en" dir="ltr">WITH LOVE, ALWAYS.</span><button id="replay" class="quiet-button" type="button">عِش الحكاية من جديد <span aria-hidden="true">↻</span></button></div>
+      <img class="closing-photo" src="assets/gallery-garden.webp" alt="" loading="lazy" decoding="async" aria-hidden="true">
+      <div class="closing-halo" aria-hidden="true"></div>
+      <div class="closing-content reveal">
+        <span class="closing-kicker" lang="en" dir="ltr">THE BEGINNING OF ALWAYS</span>
+        <span class="closing-star" aria-hidden="true">✧</span>
+        <h2 class="closing-title">بعض الليالي تنتهي،<br><em>وحكايتنا تبدأ.</em></h2>
+        <p class="closing-phrase" data-bind="closingPhrase"></p>
+        <p class="closing-names"><span data-bind="brideName"></span><span>و</span><span data-bind="groomName"></span></p>
+        <a class="closing-link" href="#event-details">نلتقي على الفرح <span aria-hidden="true">↑</span></a>
+      </div>
+      <div class="footer-bottom"><span lang="en" dir="ltr">WITH LOVE, ALWAYS.</span><button id="replay" class="quiet-button" type="button">من البداية، بكلّ الحب <span aria-hidden="true">↻</span></button></div>
     </footer>
   </main>
   <button id="sound-toggle" class="sound-toggle" type="button" aria-label="تشغيل الصوت" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>

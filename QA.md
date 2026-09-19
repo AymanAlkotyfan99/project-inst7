@@ -1,33 +1,17 @@
-# Verification
+# Validation — floral redesign
 
-Verified locally in headless Chrome on 19 September 2026. These are browser viewport simulations, not claims of testing physical phones or Safari.
+The September 2026 revision replaces the table with suspended stationery and adds a prologue, staged name reveal, touch gallery, event detail cards, petals, and a garden ending.
 
-| Check | Result |
-| --- | --- |
-| 360 × 800, 375 × 812, 390 × 844, 393 × 873, 430 × 932 | Complete interaction passes |
-| Desktop, 1440 × 1000 | Entrance, card, invitation, story visually inspected |
-| Automatic presentation | Landscape envelope stays flat over the table; rise is limited to 8px, with zero in-plane rotation |
-| One tap, followed by five rapid touch events | Envelope opens once; every following state occurs exactly once |
-| Opening materials | Paper flaps hinge open and warm light appears; no visible writing is painted before the actual invitation |
-| Sealed envelope | Warm rim light and four softly illuminated corners are visible before touch |
-| Slow opening | Still opening two seconds after activation; unfolding lasts 3.4 seconds after the seal releases |
-| Sunlight sequence | Six rays expand from the envelope; the fully opened paper holds for 2.3 seconds before entry |
-| Reduced motion | Camera journey omitted; one deliberate activation opens the invitation |
-| Replay and skip | Correct state reset; no old delayed actions resume |
-| Scroll | Locked before entry; unlocked afterward |
-| Geometry | Oval table and card anchor stay centered; contact shadow remains; the open paper fits mobile width |
-| Camera composition | Bride removed; loaded white floral arch frames hinged doors; cinematic container cannot scroll when the card receives focus |
-| Door opening | Inspected at 350, 850, and 1350ms: leaves rotate inward, stay inside the aperture, and do not protrude beyond the flowers |
-| Arabic | Names آلاء / ياسر and initials آ / ي are restricted to the actual invitation and checked in DOM/screenshots |
-| Runtime and network | No console or page errors across the five mobile sizes; assets and fonts served locally |
-| No video | No video element or video playback dependency |
-| Configured sample date | Arabic countdown, HTTPS map, and calendar download pass |
-| Time zone | Sample 19:30 Asia/Damascus correctly exports 16:30 UTC in the calendar file |
+Validation for this revision covers JavaScript syntax, the production build, local asset references, duplicate HTML identifiers, and source review of the interaction contracts. Date/time/calendar behavior is checked independently in Node. Browser screenshots and device simulations from the preceding design do not validate this revision. No new browser or physical-phone visual QA was performed.
 
-The event test temporarily overrides the served script. It does not put a sample date or map into the delivered invitation.
+Important behavior:
 
-The revised motion uses transforms and opacity, a small number of atmospheric particles, restrained background blur, and CSS light layers. Physical phone performance has not been measured. The cinematic container uses `overflow: clip` to prevent browser focus scrolling from shifting the entire scene during envelope opening.
+- The supplied date is 2026-08-30 at 17:00 Asia/Damascus; calendar export resolves to 14:00 UTC.
+- A past date keeps event details and calendar download available while hiding countdown values.
+- The venue link is a labeled search for إيليت بلازا, not an invented exact address.
+- Names live in the chapter after the first viewport and reveal in complete Arabic words.
+- Gallery position is synchronized with native scrolling, arrow keys, arrow buttons, dots, and resize.
+- Petals stop when hidden or when reduced motion is requested.
+- The existing state-machine cancellation continues to govern skip, replay, and changes to motion preferences.
 
-`tools/qa.mjs` contains the interaction checks. Run it with Node and the path to an installed Playwright `index.mjs`; it uses an installed Chrome browser. Generated screenshots and raw results stay in the untracked `.qa` directory.
-
-Before distributing the invitation to guests, replace the date, time, venue, city, and map placeholders in `script.js`. Physical iOS Safari and WhatsApp/Instagram in-app browser checks remain advisable for the final guest environment.
+The previous `tools/qa.mjs` browser suite contains assumptions about the retired table composition and unconfigured event. Update those expectations before using it to assess this redesign.

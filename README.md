@@ -1,59 +1,37 @@
-# Open the door — enter their story
+# A story in bloom
 
-A mobile-first Arabic wedding invitation for آلاء and ياسر, built with HTML, CSS, and vanilla JavaScript. White flowers frame hinged architectural doors. Inside, an embossed invitation rests on an oval stone table, gently rises as the doors open, and waits for one deliberate tap. Its paper flaps open, warm light emerges, and the paper fills the screen to become the invitation website. No video is embedded, rendered, or played.
+A mobile-first Arabic wedding invitation for آلاء and ياسر. White floral doors open onto an embossed envelope suspended in warm light. A single tap opens its paper folds; the page begins with a poetic prologue, then reveals the couple's names as the visitor scrolls. The invitation continues through a swipeable photographic gallery, date/time/location details, and a full-height garden closing. Soft falling petals connect the experience. There is no table or video.
 
-## Run locally
+## Run
 
-Use Node.js 20 or newer. There are no runtime packages to install.
+Node.js 20 or newer; no runtime packages required.
 
 ```sh
 npm run dev
-```
-
-In Windows PowerShell, use `npm.cmd run dev` if the PowerShell execution policy blocks `npm.ps1`. Open <http://localhost:5173>.
-
-```sh
 npm run check
 npm run build
 ```
 
-The build checks JavaScript syntax and writes the static site to `dist/client`. Deploy that directory to a static host with `index.html` as the entry point. The build also prepares `dist/server/index.js` for a Worker environment that provides an `ASSETS` binding; a static deployment needs only `dist/client`.
+Use `npm.cmd` on Windows if PowerShell blocks `npm.ps1`. Local preview: http://localhost:5173. The build produces `dist/client` for static hosting and `dist/server/index.js` for a Worker with an `ASSETS` binding. Hosting identity stays in `.openai/hosting.json`.
 
-## Personalize
+## Invitation details
 
-Edit the single `invitationData` object at the top of `script.js`. Names, initials, phrases, date, time, time zone, venue, city, map link, and visual asset paths are configured there.
+The single `invitationData` object in `script.js` holds names, event information, phrases, images, and motion timings. The supplied details are 30 August 2026, 17:00 in Asia/Damascus, إيليت بلازا. No city or precise venue pin was supplied, so the map button searches Google Maps for the venue name. Replace `mapsUrl` with the exact venue URL when available.
 
-- Keep `date` and `time` as `null` until confirmed. Set the date to `YYYY-MM-DD` and the time to 24-hour `HH:MM`, interpreted in `timeZone`.
-- Replace the venue and city announcement placeholders with confirmed details.
-- Set `mapsUrl` to a valid HTTPS venue map URL. An unconfigured map link stays hidden.
-- A valid date and time reveal the Arabic countdown and downloadable calendar invitation. Unknown or invalid event details show an announcement instead of an invented event.
-- Keep optional asset entries `null` until their files exist. See [the asset guide](assets/README.md) for replacement framing and provenance.
+Dates use `YYYY-MM-DD`; times use 24-hour `HH:MM`. Set unconfirmed fields to `null`. A valid event enables calendar download with the correct UTC conversion. Past events retain their date and calendar action but do not show a negative countdown. No end time is invented.
 
-The recognizable Arabic initials آ and ي appear only in the main invitation footer. A supplied calligrapher's SVG can replace that monogram. The cinematic entrance, embossed cover, floral wax seal, and opening paper contain no visible lettering.
+## Photos and design
 
-## Experience and access
+`invitationData.photos` controls the gallery. Replace each entry's `src`, `alt`, `title`, `caption`, `width`, and `height` with personal photos if desired. The included photos depict wedding atmosphere and flowers; they are not pictures of the couple or the actual venue. Source attribution is in `assets/gallery-sources.md`.
 
-The intro has no bride. The closed entrance carries a separate photographic white floral arch; each door leaf rotates around its own hinge. An oval stone tabletop with two legs supports the invitation and its contact shadow.
+The gallery uses native horizontal scrolling and CSS scroll snapping. It supports touch swiping, arrow buttons, dots, and ArrowLeft/ArrowRight/Home/End keys. There is no autoplay. Its photographs are lazy loaded and stored locally. Hero and closing photos reuse the same local gallery assets.
 
-1. After a short pause, the doors open automatically.
-2. The landscape invitation stays flat and straight on the white tabletop. As the doors open inward within the floral frame, the paper rises only 8 pixels without standing upright or tilting sideways.
-3. In `CARD_READY`, warm light outlines the sealed paper and all four corners glow gently. One deliberate tap releases the seal, then unfolds the paper slowly over 3.4 seconds.
-4. Six soft sunlight beams emerge from inside. The fully opened envelope holds for 2.3 seconds before a 2.5-second paper push-in reveals the Arabic invitation. Scrolling unlocks only when the invitation becomes active.
+The custom share image is `assets/social-preview-v3.png`; its prompt and built-in imagegen provenance are in `assets/social-v3-prompt.txt`. The scene and all fonts are bundled locally. Existing font licenses remain in `assets/fonts`.
 
-The opening has no visible instructions, names, initials, or other lettering. Subtle icon-only skip and sound controls retain Arabic accessible labels. State changes have screen-reader announcements. The invitation is a native button supporting touch, mouse, stylus, and keyboard activation; taps during transitions are ignored. The footer can replay the experience.
+## Motion and access
 
-Reduced-motion preferences suppress the camera journey and decorative motion while keeping the same single card activation. Changing that preference during a sequence cancels pending animation work safely. Focus transfers to the invitation when it opens. Inactive content is inert, and Arabic RTL text has no letter spacing on Arabic words.
+The envelope and entrance carry no visible names. The prologue is the first focus target after opening. Names enter in complete Arabic words on scrolling, without letter spacing that would break their ligatures. Replay resets the reveal and title.
 
-Sound starts disabled. The small sound control enables quiet synthesized material cues only after the visitor activates it. JavaScript is required for the interactive opening; a no-script notice explains this.
+Sixteen lightweight CSS petals pause when the page is hidden and are removed for reduced-motion preferences. Reduced motion also shortens the opening and removes name motion. Skip, replay, keyboard activation, inert inactive content, and screen-reader announcements are supported. Sound starts disabled and enables quiet synthesized material sounds after an explicit activation.
 
-The `motion` settings in `invitationData` control seal release, unfolding, sunlight hold, and paper entry in milliseconds. CSS durations are derived from the same settings. Reduced motion keeps short transitions, disables pulsing corners and ray streaks, and preserves the single activation.
-
-## Assets and delivery
-
-The active photographic layers are the interior, transparent floral arch, landscape embossed paper, and transparent floral wax seal. Together with the reusable paper texture, these are about 848 KiB. The social preview is a separate static sharing image. Architecture, door hinges, the oval table, envelope flaps, contact shadow, opening light, and paper transition use independent DOM/CSS layers.
-
-The original `bride.webp`, portrait `embossed-paper.webp`, and `social-preview.webp` remain as retired source assets and are excluded from the build. The current social preview is `assets/social-preview-v2.webp`.
-
-Amiri, IBM Plex Sans Arabic, and Cormorant Garamond are bundled as local WOFF2 subsets in `assets/fonts`, with their SIL Open Font License notices. The finished page makes no external font, script, or image requests. `tools/vendor-fonts.mjs` is a one-time maintenance helper; it is not used at runtime.
-
-Primary source files are `index.html`, `style.css`, and `script.js`. The asset guide distinguishes included files from optional replacement slots.
+See `QA.md` for the scope of validation on this revision.

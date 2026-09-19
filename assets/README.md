@@ -1,12 +1,12 @@
 # Cinematic asset guide
 
-The opening is a real DOM/CSS experience. The floral frame, hinged doors, room, oval stone table, contact shadow, and invitation remain independent layers. Keep the invitation's paper and envelope flaps as HTML/CSS: it rises gently as the doors open, then one deliberate tap opens the paper and reveals warm light before the seamless website transition.
+The opening is a real DOM/CSS experience. The floral frame, hinged doors, room, floating halo, and invitation remain independent layers. There is no table. Keep the invitation's paper and envelope flaps as HTML/CSS: one deliberate tap opens the suspended paper and reveals warm light before the seamless website transition.
 
-There is no bride and no visible lettering anywhere in the cinematic entrance. The seal is floral ornament only. Names and initials appear after entry into the actual invitation.
+There is no bride and no visible lettering anywhere in the cinematic entrance. The seal is floral ornament only. The names appear on scrolling past the invitation's opening prologue.
 
 ## Included images and replacement slots
 
-Configure visual paths in `invitationData.assets` at the top of `../script.js`. Optional slots default to `null`; their proposed filenames are documented targets, not included files. CSS doors, the oval table, and the footer's text monogram remain available as fallbacks.
+Configure visual paths in `invitationData.assets` at the top of `../script.js`. Optional slots default to `null`; their proposed filenames are documented targets, not included files. The gallery uses `invitationData.photos`; see [gallery sources](gallery-sources.md). The current social card is `social-preview-v3.png`, generated with the built-in imagegen tool; its exact prompt is [documented here](social-v3-prompt.txt). Historical asset notes below predate the floral redesign; pedestal and footer monogram integrations are retired.
 
 | Asset / configuration key | Status | Replacement requirements |
 | --- | --- | --- |
