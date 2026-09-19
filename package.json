@@ -1,0 +1,12 @@
+{
+  "name": "alaa-yasser-an-invitation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/serve.mjs",
+    "build": "node tools/build.mjs",
+    "check": "node --check script.js"
+  },
+  "engines": { "node": ">=20" }
+}
