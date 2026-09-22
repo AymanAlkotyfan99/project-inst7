@@ -25,8 +25,8 @@ const invitationData = Object.freeze({
     Object.freeze({ src: "assets/gallery-garden.webp", width: 1200, height: 900, alt: "ورود حديقة كريمية بين أوراق خضراء داكنة", title: "حكاية تزهر", caption: "للحكايات الجميلة أماكن تشبهها" }),
     Object.freeze({ src: "assets/gallery-ceremony.webp", width: 1200, height: 798, alt: "تنسيق زفاف أنيق بين الزهور والضوء", title: "ليلة من العمر", caption: "وكل ما نتمناه… أن تكونوا معنا" })
   ]),
-  // Milliseconds: a deliberate seal release, slow unfolding, sunlight, then entry.
-  motion: Object.freeze({ sealRelease: 650, opening: 3400, sunlightHold: 2300, entry: 2500 }),
+  // Milliseconds: the complete tap-to-invitation sequence lasts 5 seconds.
+  motion: Object.freeze({ press: 100, sealRelease: 350, opening: 1900, sunlightHold: 350, entry: 1450, reveal: 850 }),
   // Optional assets are requested only when their path is configured.
   // Transparent door assets should be tightly cropped to their object.
   assets: Object.freeze({
@@ -48,6 +48,7 @@ const invitationData = Object.freeze({
   body.style.setProperty("--envelope-opening", `${motion.opening}ms`);
   body.style.setProperty("--seal-release", `${motion.sealRelease}ms`);
   body.style.setProperty("--paper-entry", `${motion.entry}ms`);
+  body.style.setProperty("--invitation-reveal", `${motion.reveal}ms`);
   const cinematic = document.getElementById("cinematic");
   const invitation = document.getElementById("invitation");
   const card = document.getElementById("invitation-card");
@@ -311,9 +312,7 @@ const invitationData = Object.freeze({
     card.disabled = false;
     card.setAttribute("aria-label", "افتح دعوة الزفاف");
     setState(STATES.CARD_READY, "الدعوة أمامك. المس الختم لفتحها.");
-    if (await wait(1300, token)) {
-      if (state === STATES.CARD_READY && !transitioning) setHint("", true);
-    }
+    setHint("المس الختم… لتبدأ الحكاية", true);
   }
 
   async function runOpening() {
@@ -331,20 +330,17 @@ const invitationData = Object.freeze({
       return;
     }
 
-    if (!(await wait(900, token))) return;
+    if (!(await wait(300, token))) return;
     setState(STATES.DOOR_OPENING);
     body.classList.add("doors-open");
     playSound("door");
-    if (!(await wait(1450, token))) return;
-    setState(STATES.CARD_PRESENTING);
-    body.classList.add("card-presented");
-    if (!(await wait(250, token))) return;
+    if (!(await wait(800, token))) return;
     setState(STATES.CAMERA_ENTERING);
     body.classList.add("camera-entered");
-    if (!(await wait(1800, token))) return;
+    if (!(await wait(550, token))) return;
     setState(STATES.CARD_APPROACH);
-    body.classList.add("approached");
-    if (!(await wait(1400, token))) return;
+    body.classList.add("approached", "card-presented");
+    if (!(await wait(950, token))) return;
     await makeCardReady(token);
   }
 
@@ -356,7 +352,7 @@ const invitationData = Object.freeze({
     setHint("", false);
     setState(STATES.CARD_OPENING, "تُفتح الدعوة.");
     playSound("touch");
-    if (!(await wait(reducedMotion ? 30 : 100, token))) return;
+    if (!(await wait(reducedMotion ? 30 : motion.press, token))) return;
     body.classList.remove("card-pressed");
     setHandVisible(false);
     body.classList.add("seal-released");
@@ -399,7 +395,7 @@ const invitationData = Object.freeze({
     resetPointer();
     revealSections();
     requestAnimationFrame(updateGallery);
-    if (await wait(reducedMotion ? 260 : 1100, token)) cinematic.hidden = true;
+    if (await wait(reducedMotion ? 260 : motion.reveal, token)) cinematic.hidden = true;
   }
 
   function skipIntro() {

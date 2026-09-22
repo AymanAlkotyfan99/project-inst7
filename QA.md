@@ -1,8 +1,8 @@
-# Validation — floral redesign
+# Validation — burgundy invitation refresh
 
-The September 2026 revision replaces the table with suspended stationery and adds a prologue, staged name reveal, touch gallery, event detail cards, petals, and a garden ending.
+The September 22 revision adds burgundy petals, a hidden-to-visible tilted envelope entrance, a five-second opening, and an ivory/burgundy interior with event details before the gallery.
 
-Validation for this revision covers JavaScript syntax, the production build, local asset references, duplicate HTML identifiers, and source review of the interaction contracts. Date/time/calendar behavior is checked independently in Node. Browser screenshots and device simulations from the preceding design do not validate this revision. No new browser or physical-phone visual QA was performed.
+Validation for this revision covers JavaScript syntax, the production build, local asset references, duplicate HTML identifiers, section links, stylesheet structure, local HTTP responses, and production/source parity. A Node VM with a fake clock exercises the actual entrance/opening functions, including skip and replay at seven stages and reduced motion. Browser screenshots and device simulations from preceding designs do not validate this revision. No new browser or physical-phone visual QA was performed.
 
 Important behavior:
 
@@ -12,6 +12,9 @@ Important behavior:
 - Names live in the chapter after the first viewport and reveal in complete Arabic words.
 - Gallery position is synchronized with native scrolling, arrow keys, arrow buttons, dots, and resize.
 - Petals stop when hidden or when reduced motion is requested.
+- The envelope becomes ready 2.6 seconds after asset readiness. Its initial opacity remains zero until the reveal.
+- A tap activates invitation content at 4.15 seconds; the final 850 ms fade completes the five-second opening.
+- Reduced motion activates content after 760 ms and hides the cinematic after 1.02 seconds.
 - The existing state-machine cancellation continues to govern skip, replay, and changes to motion preferences.
 
 The previous `tools/qa.mjs` browser suite contains assumptions about the retired table composition and unconfigured event. Update those expectations before using it to assess this redesign.

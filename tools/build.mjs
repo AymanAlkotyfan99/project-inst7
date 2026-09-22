@@ -3,7 +3,7 @@ import { basename } from 'node:path';
 import { execFileSync } from 'node:child_process';
 execFileSync(process.execPath, ['--check', 'script.js'], { stdio: 'inherit' });
 await mkdir('dist/client', { recursive: true });
-for (const file of ['index.html', 'style.css', 'script.js']) await cp(file, `dist/client/${file}`);
+for (const file of ['index.html', 'style.css', 'invitation-interior.css', 'script.js']) await cp(file, `dist/client/${file}`);
 const retiredAssets = ['bride.webp', 'social-preview.webp', 'social-preview-v2.webp', 'embossed-paper.webp'];
 await cp('assets', 'dist/client/assets', { recursive: true, filter: (source) => !retiredAssets.includes(basename(source)) });
 for (const file of retiredAssets) await rm(`dist/client/assets/${file}`, { force: true });

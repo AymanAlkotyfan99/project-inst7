@@ -25,6 +25,7 @@
   <link rel="preload" href="assets/interior.webp" as="image" fetchpriority="high">
   <link rel="preload" href="assets/floral-arch.webp" as="image">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="invitation-interior.css">
   <script src="script.js" defer></script>
 </head>
 <body data-state="LOADING">
@@ -65,6 +66,8 @@
       </div>
     </div>
 
+    <p id="card-hint" class="card-hint" aria-hidden="true"></p>
+
     <div class="entrance" aria-hidden="true">
       <div class="facade facade-left"></div><div class="facade facade-right"></div>
       <div class="stone-cornice"></div>
@@ -92,7 +95,7 @@
   <main id="invitation" class="invitation paper" inert>
     <section class="invitation-hero" aria-labelledby="invitation-title">
       <img class="hero-floral-photo" src="assets/gallery-roses.webp" alt="" decoding="async" aria-hidden="true">
-      <div class="hero-topline"><span lang="en" dir="ltr">A BEAUTIFUL BEGINNING</span><span>دعوة بكلّ الحب</span></div>
+      <div class="hero-topline"><span lang="en" dir="ltr">A BEAUTIFUL BEGINNING</span><span>دعوة بكلّ الحب <i aria-hidden="true">✧</i></span></div>
       <div class="hero-arch" aria-hidden="true"></div>
       <div class="hero-center">
         <span class="hero-kicker" lang="en" dir="ltr">THE WEDDING INVITATION</span>
@@ -100,6 +103,7 @@
         <h1 id="invitation-title" class="prologue-title" tabindex="-1">ولنا في الحبّ<br><em>حكاية.</em></h1>
         <div class="fine-rule" aria-hidden="true"><i></i><span>✧</span><i></i></div>
         <p class="hero-note">دعوة إلى ليلةٍ تشبه الحلم<br>وإلى فرحةٍ لا تكتمل إلّا بكم.</p>
+        <a class="hero-details-link" href="#event-details">موعدنا وتفاصيل الليلة <span aria-hidden="true">↓</span></a>
       </div>
       <a id="scroll-cue" class="scroll-cue" href="#our-story"><span>اكتشفوا الحكاية</span><i aria-hidden="true"></i></a>
       <div class="hero-edition" lang="en" dir="ltr">A LITTLE MAGIC. A LIFETIME OF LOVE.</div>
@@ -107,13 +111,26 @@
 
     <section id="our-story" class="names-section" aria-labelledby="couple-names">
       <div class="names-ornament" aria-hidden="true"><span></span>✧<span></span></div>
-      <div class="names-reveal reveal">
+      <div class="names-reveal names-letter reveal">
         <p class="section-label">قلبان، وحكايةٌ واحدة</p>
         <h2 id="couple-names" class="hero-names"><span data-bind="brideName"></span><em>و</em><span data-bind="groomName"></span></h2>
         <p class="names-verse" data-bind="openingPhrase"></p>
         <p class="names-invitation">بكلّ الحب والامتنان، ندعوكم لمشاركتنا حفل زفافنا.<br>لأنّ أجمل البدايات، هي التي نجتمع فيها بمن نحبّ.</p>
+        <span class="letter-signoff">بحضوركم، تكتمل فرحتنا.</span>
       </div>
       <span class="names-footnote" lang="en" dir="ltr">TWO SOULS. ONE BEAUTIFUL STORY.</span>
+    </section>
+
+    <section id="event-details" class="event-section" aria-labelledby="event-heading">
+      <div class="section-heading reveal"><span class="section-label">موعدٌ مع الفرح</span><h2 id="event-heading">ليلةٌ من العُمر.<br><em>أنتم أجمل تفاصيلها.</em></h2><p>كلّ ما تحتاجونه، لتكونوا بالقرب من فرحتنا.</p></div>
+      <div class="event-grid">
+        <div class="event-detail reveal"><span class="detail-icon icon-calendar" aria-hidden="true"></span><span class="detail-label">التاريخ</span><p id="date-display">نعلن التاريخ قريبًا</p><span class="detail-footnote" lang="en" dir="ltr">SAVE THE DATE</span></div>
+        <div class="event-detail reveal"><span class="detail-icon icon-clock" aria-hidden="true"></span><span class="detail-label">الوقت</span><p id="time-display">نعلن الساعة قريبًا</p><span class="detail-footnote">تبدأ الليلة، وتبقى الذكرى</span></div>
+        <div class="event-detail reveal"><span class="detail-icon icon-location" aria-hidden="true"></span><span class="detail-label">المكان</span><h3 id="venue-display"></h3><p id="city-display"></p><a id="map-link" class="text-link" target="_blank" rel="noopener noreferrer" hidden>ابحثوا عن القاعة على الخريطة <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <p id="event-pending" class="pending-note">تفاصيل الليلة تُضاف قريبًا.</p>
+      <button id="save-date" class="save-date-button" type="button" hidden>أضيفوا الموعد إلى التقويم <span aria-hidden="true">↗</span></button>
+      <div id="countdown" class="countdown" hidden aria-label="الوقت المتبقي حتى موعد الزفاف"></div>
     </section>
 
     <section id="moments" class="gallery-section" aria-labelledby="gallery-heading">
@@ -128,18 +145,6 @@
         <p class="gallery-hint">اسحبوا الصور، واكتشفوا التفاصيل <span aria-hidden="true">↔</span></p>
         <p id="gallery-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
       </div>
-    </section>
-
-    <section id="event-details" class="event-section" aria-labelledby="event-heading">
-      <div class="section-heading reveal"><span class="section-label">موعدٌ مع الفرح</span><h2 id="event-heading">ليلةٌ من العُمر.<br><em>أنتم أجمل تفاصيلها.</em></h2><p>كلّ ما تحتاجونه، لتكونوا بالقرب من فرحتنا.</p></div>
-      <div class="event-grid">
-        <div class="event-detail reveal"><span class="detail-icon icon-calendar" aria-hidden="true"></span><span class="detail-label">التاريخ</span><p id="date-display">نعلن التاريخ قريبًا</p><span class="detail-footnote" lang="en" dir="ltr">SAVE THE DATE</span></div>
-        <div class="event-detail reveal"><span class="detail-icon icon-clock" aria-hidden="true"></span><span class="detail-label">الوقت</span><p id="time-display">نعلن الساعة قريبًا</p><span class="detail-footnote">تبدأ الليلة، وتبقى الذكرى</span></div>
-        <div class="event-detail reveal"><span class="detail-icon icon-location" aria-hidden="true"></span><span class="detail-label">المكان</span><h3 id="venue-display"></h3><p id="city-display"></p><a id="map-link" class="text-link" target="_blank" rel="noopener noreferrer" hidden>ابحثوا عن القاعة على الخريطة <span aria-hidden="true">↗</span></a></div>
-      </div>
-      <p id="event-pending" class="pending-note">تفاصيل الليلة تُضاف قريبًا.</p>
-      <button id="save-date" class="save-date-button" type="button" hidden>أضيفوا الموعد إلى التقويم <span aria-hidden="true">↗</span></button>
-      <div id="countdown" class="countdown" hidden aria-label="الوقت المتبقي حتى موعد الزفاف"></div>
     </section>
 
     <footer class="closing-section">

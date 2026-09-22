@@ -1,6 +1,6 @@
 # A story in bloom
 
-A mobile-first Arabic wedding invitation for آلاء and ياسر. White floral doors open onto an embossed envelope suspended in warm light. A single tap opens its paper folds; the page begins with a poetic prologue, then reveals the couple's names as the visitor scrolls. The invitation continues through a swipeable photographic gallery, date/time/location details, and a full-height garden closing. Soft falling petals connect the experience. There is no table or video.
+A mobile-first Arabic wedding invitation for آلاء and ياسر. White floral doors open before a tilted embossed envelope appears in warm light. A single tap opens its paper folds and reveals the invitation in five seconds, including the final fade. The ivory and burgundy page begins with a poetic prologue, then reveals the couple's names as the visitor scrolls. Date/time/location details follow, ahead of a swipeable photographic gallery and a floral closing. Burgundy falling petals connect the experience. There is no table or video.
 
 ## Run
 
@@ -32,6 +32,6 @@ The custom share image is `assets/social-preview-v3.png`; its prompt and built-i
 
 The envelope and entrance carry no visible names. The prologue is the first focus target after opening. Names enter in complete Arabic words on scrolling, without letter spacing that would break their ligatures. Replay resets the reveal and title.
 
-Sixteen lightweight CSS petals pause when the page is hidden and are removed for reduced-motion preferences. Reduced motion also shortens the opening and removes name motion. Skip, replay, keyboard activation, inert inactive content, and screen-reader announcements are supported. Sound starts disabled and enables quiet synthesized material sounds after an explicit activation.
+Sixteen lightweight burgundy CSS petals pause when the page is hidden and are removed for reduced-motion preferences. The entrance takes 2.6 seconds after initial asset readiness; the envelope stays hidden until its reveal. The full tap-to-invitation sequence takes five seconds, with timing configured in `invitationData.motion`. Reduced motion shortens the opening and removes name motion. Skip, replay, keyboard activation, inert inactive content, and screen-reader announcements are supported. Sound starts disabled and enables quiet synthesized material sounds after an explicit activation.
 
 See `QA.md` for the scope of validation on this revision.
