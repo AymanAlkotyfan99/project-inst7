@@ -94,8 +94,8 @@ button:disabled { cursor: default; }
 
 /* Embossed stationery, separate folding paper planes and a real seal image. */
 .card-anchor { position: absolute; width: var(--card-w); height: var(--card-h); left: 50%; bottom: 32%; transform: translateX(-50%); perspective: 1400px; z-index: 5; transition: transform 1.6s var(--cinema); }
-.card-lift { width: 100%; height: 100%; transform-origin: 50% 100%; transform: rotateX(64deg); transform-style: preserve-3d; transition: transform 1.9s var(--ease); }
-.card-presented .card-lift { transform: translateY(-8px) rotateX(64deg); }
+.card-lift { width: 100%; height: 100%; transform-origin: 50% 100%; transform: translateY(24px); transform-style: preserve-3d; transition: transform 1.9s var(--ease); }
+.card-presented .card-lift { transform: translateY(-8px); }
 .invitation-card { display: block; position: relative; padding: 0; border: 0; background: transparent; width: 100%; height: 100%; transform-style: preserve-3d; transform: scale(1); transition: transform 80ms; text-align: center; outline-offset: 10px; }
 .card-pressed .invitation-card { transform: scale(.985) translateY(2px); }
 .card-back,.card-inside { position: absolute; display: block; inset: 0; border-radius: 3px; }
@@ -172,9 +172,9 @@ body[data-state="CARD_READY"] .sunlit-corners i:nth-child(even) { animation-dela
 :root { --ivory: #f7f4ed; --sage: #626b55; --ink: #474737; --gold: #9a7a4d; --burgundy: #742d40; --card-w: clamp(220px, 66vw, 350px); }
 .object-rig { transform-origin: 50% 50%; }
 .card-anchor { bottom: 43%; }
-.card-lift { transform-origin: 50% 50%; transform: translateY(24px) rotateX(20deg) rotateY(-14deg) rotateZ(-17deg); transition-duration: .95s; }
-.card-presented .card-lift { transform: translateY(-8px) rotateX(10deg) rotateY(-9deg) rotateZ(-11deg); }
-.card-opened .card-lift { transform: translateY(14px) rotateX(0deg) rotateY(0deg) rotateZ(-3deg); }
+.card-lift { transform-origin: 50% 50%; transform: translateY(24px); transition-duration: .95s; }
+.card-presented .card-lift { transform: translateY(-8px); }
+.card-opened .card-lift { transform: translateY(14px); }
 .card-back { box-shadow: 1px 1px 0 #fff7e6, 2px 3px 0 #ae9574, 0 30px 65px #17131070; }
 .floating-halo { position: absolute; width: min(88vw,540px); height: min(75vh,640px); top: 50%; left: 50%; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(ellipse,#f5e5b945, #f2dba51a 35%,transparent 69%); transition: opacity 1.4s; }
 .floating-halo i { position: absolute; inset: 4% 9%; border: 1px solid #e7d2a33a; border-radius: 50% 50% 46% 46%; transform: rotate(-13deg); box-shadow: 0 0 20px #ffe9b908; }

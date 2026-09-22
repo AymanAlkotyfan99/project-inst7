@@ -1,6 +1,6 @@
 # Validation — burgundy invitation refresh
 
-The September 22 revision adds burgundy petals, a hidden-to-visible tilted envelope entrance, a five-second opening, and an ivory/burgundy interior with event details before the gallery.
+The September 22 revision adds burgundy petals, a hidden-to-visible straight envelope entrance, a five-second opening, and an ivory/burgundy interior with event details before the gallery. A follow-up removes the envelope's overall tilt while preserving the paper-fold animation; verified by source review and a successful production build.
 
 Validation for this revision covers JavaScript syntax, the production build, local asset references, duplicate HTML identifiers, section links, stylesheet structure, local HTTP responses, and production/source parity. A Node VM with a fake clock exercises the actual entrance/opening functions, including skip and replay at seven stages and reduced motion. Browser screenshots and device simulations from preceding designs do not validate this revision. No new browser or physical-phone visual QA was performed.
 

@@ -1,6 +1,6 @@
 # A story in bloom
 
-A mobile-first Arabic wedding invitation for آلاء and ياسر. White floral doors open before a tilted embossed envelope appears in warm light. A single tap opens its paper folds and reveals the invitation in five seconds, including the final fade. The ivory and burgundy page begins with a poetic prologue, then reveals the couple's names as the visitor scrolls. Date/time/location details follow, ahead of a swipeable photographic gallery and a floral closing. Burgundy falling petals connect the experience. There is no table or video.
+A mobile-first Arabic wedding invitation for آلاء and ياسر. White floral doors open before a straight, front-facing embossed envelope appears in warm light. A single tap opens its paper folds and reveals the invitation in five seconds, including the final fade. The ivory and burgundy page begins with a poetic prologue, then reveals the couple's names as the visitor scrolls. Date/time/location details follow, ahead of a swipeable photographic gallery and a floral closing. Burgundy falling petals connect the experience. There is no table or video.
 
 ## Run
 
