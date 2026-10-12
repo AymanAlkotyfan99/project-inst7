@@ -16,9 +16,9 @@ Use `npm.cmd` on Windows if PowerShell blocks `npm.ps1`. Local preview: http://l
 
 ## Invitation details
 
-The single `invitationData` object in `script.js` holds names, event information, phrases, images, and motion timings. The supplied details are 30 August 2026, 17:00 in Asia/Damascus, إيليت بلازا. No city or precise venue pin was supplied, so the map button searches Google Maps for the venue name. Replace `mapsUrl` with the exact venue URL when available.
+The single `invitationData` object in `script.js` holds names, event information, phrases, images, and motion timings. The supplied details are 1 November 2026, 17:00 in Asia/Damascus, إيليت بلازا. No city or precise venue pin was supplied, so the map button searches Google Maps for the venue name. Replace `mapsUrl` with the exact venue URL when available.
 
-Dates use `YYYY-MM-DD`; times use 24-hour `HH:MM`. Set unconfirmed fields to `null`. A valid event enables calendar download with the correct UTC conversion. Past events retain their date and calendar action but do not show a negative countdown. No end time is invented.
+Dates use `YYYY-MM-DD`; times use 24-hour `HH:MM`. Set unconfirmed fields to `null`. A valid event enables calendar download with the correct UTC conversion. The celestial countdown follows the event section, updates only while visible, and shows a celebration message with zero values when the event arrives. No end time is invented.
 
 ## Photos and design
 
@@ -32,6 +32,8 @@ The custom share image is `assets/social-preview-v3.png`; its prompt and built-i
 
 The envelope and entrance carry no visible names. The prologue is the first focus target after opening. Names enter in complete Arabic words on scrolling, without letter spacing that would break their ligatures. Replay resets the reveal and title.
 
-Sixteen lightweight burgundy CSS petals pause when the page is hidden and are removed for reduced-motion preferences. The entrance takes 2.6 seconds after initial asset readiness; the envelope stays hidden until its reveal. The full tap-to-invitation sequence takes five seconds, with timing configured in `invitationData.motion`. Reduced motion shortens the opening and removes name motion. Skip, replay, keyboard activation, inert inactive content, and screen-reader announcements are supported. Sound starts disabled and enables quiet synthesized material sounds after an explicit activation.
+Seven burgundy CSS petals on phones/touch devices (sixteen on desktop) pause when the page is hidden and are removed for reduced-motion preferences. Large animated blur layers are disabled on phones. The entrance takes 2.6 seconds after initial asset readiness; the envelope stays hidden until its reveal. The full tap-to-invitation sequence takes five seconds, with timing configured in `invitationData.motion`. Reduced motion shortens the opening and removes name motion. Skip, replay, keyboard activation, inert inactive content, and screen-reader announcements are supported.
+
+The local M4A in `assets/voice` starts at second 22 on the first envelope-opening tap. It uses `preload="none"` and invokes playback before animation waits to preserve mobile user activation. The sound button pauses/resumes playback; replaying the visual introduction does not interrupt a playing song. Skipping the introduction does not start music. The local server supports audio MIME types and byte ranges for seeking.
 
 See `QA.md` for the scope of validation on this revision.

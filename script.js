@@ -11,7 +11,7 @@ const invitationData = Object.freeze({
   groomName: "ياسر",
   brideInitial: "آ",
   groomInitial: "ي",
-  date: "2026-08-30",
+  date: "2026-11-01",
   time: "17:00",
   timeZone: "Asia/Damascus",
   venue: "إيليت بلازا",
@@ -88,7 +88,10 @@ const invitationData = Object.freeze({
   let pointerFrame = 0;
   let revealObserver = null;
   let countdownTimer = null;
-  let audioContext = null;
+  const music = document.getElementById("wedding-music");
+  const musicStart = 22;
+  let musicStarted = false;
+  let musicRequest = 0;
   let soundEnabled = false;
   let activationGateUntil = 0;
   let optionalHand = null;
@@ -333,7 +336,6 @@ const invitationData = Object.freeze({
     if (!(await wait(300, token))) return;
     setState(STATES.DOOR_OPENING);
     body.classList.add("doors-open");
-    playSound("door");
     if (!(await wait(800, token))) return;
     setState(STATES.CAMERA_ENTERING);
     body.classList.add("camera-entered");
@@ -345,20 +347,20 @@ const invitationData = Object.freeze({
   }
 
   async function openCard() {
+    // Keep play() inside the original tap, before any animation awaits (iOS).
+    if (!musicStarted) void startMusic();
     const token = epoch;
     transitioning = true;
     card.disabled = true;
     body.classList.add("card-pressed");
     setHint("", false);
     setState(STATES.CARD_OPENING, "تُفتح الدعوة.");
-    playSound("touch");
     if (!(await wait(reducedMotion ? 30 : motion.press, token))) return;
     body.classList.remove("card-pressed");
     setHandVisible(false);
     body.classList.add("seal-released");
     if (!(await wait(reducedMotion ? 70 : motion.sealRelease, token))) return;
     body.classList.add("card-opened");
-    playSound("open");
     if (!(await wait(reducedMotion ? 240 : motion.opening, token))) return;
     setState(STATES.CARD_OPEN);
     body.classList.add("foil-drawn", "sunlight-bloom");
@@ -452,7 +454,7 @@ const invitationData = Object.freeze({
 
   window.addEventListener("pointermove", (event) => {
     if (reducedMotion || event.pointerType === "touch" || transitioning || pointerFrame) return;
-    if (![STATES.CARD_READY, STATES.INVITATION_ACTIVE].includes(state)) return;
+    if (state !== STATES.CARD_READY) return;
     const x = Math.max(-1, Math.min(1, (event.clientX / window.innerWidth - 0.5) * 2));
     const y = Math.max(-1, Math.min(1, (event.clientY / window.innerHeight - 0.5) * 2));
     pointerFrame = requestAnimationFrame(() => {
@@ -670,10 +672,11 @@ const invitationData = Object.freeze({
     const field = document.getElementById("petal-field");
     if (!field) return;
     const fragment = document.createDocumentFragment();
-    for (let index = 0; index < 16; index += 1) {
+    const count = window.matchMedia("(max-width: 699px), (pointer: coarse)").matches ? 7 : 16;
+    for (let index = 0; index < count; index += 1) {
       const petal = document.createElement("i");
       petal.className = "petal";
-      petal.style.setProperty("--x", `${(index / 16 * 100 + Math.random() * 6).toFixed(2)}vw`);
+      petal.style.setProperty("--x", `${(index / count * 94 + Math.random() * 4).toFixed(2)}vw`);
       petal.style.setProperty("--size", `${(7 + Math.random() * 8).toFixed(2)}px`);
       petal.style.setProperty("--duration", `${(17 + Math.random() * 15).toFixed(2)}s`);
       petal.style.setProperty("--delay", `${(-Math.random() * 32).toFixed(2)}s`);
@@ -774,9 +777,14 @@ const invitationData = Object.freeze({
 
   function initializeCountdown(eventDate) {
     const countdown = document.getElementById("countdown");
-    if (!countdown) return;
-    countdown.hidden = !eventDate || eventDate.getTime() <= Date.now();
-    if (countdown.hidden) return;
+    const section = document.getElementById("the-moment");
+    if (!countdown || !section) return;
+    section.hidden = !eventDate;
+    if (!eventDate) return;
+    const dateLabel = document.getElementById("countdown-date");
+    dateLabel.dateTime = eventDate.toISOString();
+    dateLabel.textContent = invitationData.date.split("-").reverse().join(" . ");
+    let inView = false;
     const units = [
       ["days", "يوم"], ["hours", "ساعة"], ["minutes", "دقيقة"], ["seconds", "ثانية"]
     ];
@@ -785,9 +793,10 @@ const invitationData = Object.freeze({
     countdown.replaceChildren();
     countdown.setAttribute("role", "timer");
     countdown.setAttribute("aria-live", "off");
-    units.forEach(([unit, label]) => {
+    units.forEach(([unit, label], index) => {
       const part = document.createElement("div");
       part.className = "countdown-part";
+      part.style.setProperty("--unit-index", index);
       const value = document.createElement("span");
       value.className = "countdown-number countdown-value";
       value.dataset.countdown = unit;
@@ -804,19 +813,50 @@ const invitationData = Object.freeze({
         days: Math.floor(seconds / 86400), hours: Math.floor(seconds / 3600) % 24,
         minutes: Math.floor(seconds / 60) % 60, seconds: seconds % 60
       };
-      units.forEach(([unit]) => { values[unit].textContent = numbers.format(remaining[unit]); });
+      units.forEach(([unit]) => {
+        const next = numbers.format(remaining[unit]);
+        if (values[unit].textContent === next) return;
+        values[unit].textContent = next;
+        if (inView && !reducedMotion && values[unit].animate) {
+          values[unit].getAnimations().forEach((animation) => animation.cancel());
+          values[unit].animate([
+            { opacity: .25, transform: "translateY(9px) scale(.96)" },
+            { opacity: 1, transform: "translateY(0) scale(1)" }
+          ], { duration: 480, easing: "cubic-bezier(.16,1,.3,1)" });
+        }
+      });
       countdown.setAttribute("aria-label", seconds > 0
         ? `بقي ${numbers.format(remaining.days)} يوم و${numbers.format(remaining.hours)} ساعة على موعدنا`
         : "حلّ يوم حكايتنا");
-      if (!seconds && countdownTimer) {
-        countdown.hidden = true;
+      if (!seconds) {
+        section.classList.add("moment-arrived");
+        document.getElementById("countdown-heading").textContent = "وحانت لحظة حكايتنا.";
+        document.getElementById("countdown-message").textContent = "اليوم يبدأ العمر الجميل… وبكم تكتمل الفرحة.";
         window.clearInterval(countdownTimer);
         countdownTimer = null;
       }
     };
+    const sync = () => {
+      window.clearInterval(countdownTimer);
+      countdownTimer = null;
+      const running = inView && !document.hidden && state === STATES.INVITATION_ACTIVE;
+      section.classList.toggle("moment-running", running);
+      if (running) {
+        update();
+        if (eventDate.getTime() > Date.now()) countdownTimer = window.setInterval(update, 1000);
+      }
+    };
     update();
-    if (eventDate.getTime() > Date.now()) countdownTimer = window.setInterval(update, 1000);
-    document.addEventListener("visibilitychange", () => { if (!document.hidden) update(); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        sync();
+      }, { threshold: 0 }).observe(section);
+    } else {
+      inView = true;
+    }
+    new MutationObserver(sync).observe(body, { attributes: true, attributeFilter: ["data-state"] });
+    document.addEventListener("visibilitychange", sync);
   }
 
   function downloadCalendar(eventDate) {
@@ -862,54 +902,56 @@ const invitationData = Object.freeze({
     window.setTimeout(() => URL.revokeObjectURL(url), 3000);
   }
 
-  // Quiet material sounds only. Creating/resuming an audio context requires the
-  // visitor's explicit sound-toggle gesture; nothing plays on page load.
-  async function toggleSound() {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    soundEnabled = !soundEnabled;
-    if (soundEnabled) {
-      try {
-        if (!audioContext) audioContext = new AudioContextClass();
-        await audioContext.resume();
-      } catch {
-        soundEnabled = false;
-      }
-    }
+  function updateSoundButton() {
     if (soundButton) {
       soundButton.setAttribute("aria-pressed", String(soundEnabled));
-      soundButton.setAttribute("aria-label", soundEnabled ? "إيقاف الصوت" : "تشغيل الصوت الهادئ");
+      soundButton.setAttribute("aria-label", soundEnabled ? "إيقاف الأغنية" : "تشغيل الأغنية");
       soundButton.dataset.enabled = String(soundEnabled);
     }
-    if (soundEnabled) playSound("touch");
   }
 
-  function playSound(kind) {
-    if (!soundEnabled || !audioContext || audioContext.state !== "running") return;
-    const durations = { touch: 0.09, lift: 0.22, open: 0.55, door: 0.8 };
-    const duration = durations[kind] || 0.15;
-    const buffer = audioContext.createBuffer(1, Math.ceil(audioContext.sampleRate * duration), audioContext.sampleRate);
-    const samples = buffer.getChannelData(0);
-    for (let index = 0; index < samples.length; index += 1) samples[index] = Math.random() * 2 - 1;
-    const source = audioContext.createBufferSource();
-    const filter = audioContext.createBiquadFilter();
-    const envelope = audioContext.createGain();
-    source.buffer = buffer;
-    filter.type = "lowpass";
-    filter.frequency.value = kind === "door" ? 170 : 1350;
-    const now = audioContext.currentTime;
-    envelope.gain.setValueAtTime(0, now);
-    envelope.gain.linearRampToValueAtTime(kind === "door" ? 0.035 : 0.018, now + Math.min(0.025, duration / 4));
-    envelope.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-    source.connect(filter).connect(envelope).connect(audioContext.destination);
-    source.start(now);
-    source.stop(now + duration);
-    source.onended = () => { source.disconnect(); filter.disconnect(); envelope.disconnect(); };
+  async function startMusic() {
+    if (!music) return;
+    const request = ++musicRequest;
+    if (!musicStarted || music.ended) {
+      try { music.currentTime = musicStart; } catch { /* Metadata handler retries. */ }
+    }
+    soundEnabled = true;
+    updateSoundButton();
+    try {
+      await music.play();
+      if (request !== musicRequest) return;
+      musicStarted = true;
+    } catch {
+      if (request !== musicRequest) return;
+      soundEnabled = false;
+      updateSoundButton();
+      liveStatus.textContent = "تعذّر تشغيل الأغنية. يمكنكم المحاولة من زر الصوت.";
+    }
+  }
+
+  function toggleSound() {
+    if (!music) return;
+    if (soundEnabled) {
+      musicRequest += 1;
+      music.pause();
+      soundEnabled = false;
+      updateSoundButton();
+    } else void startMusic();
+  }
+
+  if (music) {
+    music.addEventListener("loadedmetadata", () => {
+      if (!musicStarted && music.currentTime < musicStart) music.currentTime = musicStart;
+    });
+    music.addEventListener("play", () => { soundEnabled = true; updateSoundButton(); });
+    music.addEventListener("pause", () => { soundEnabled = false; updateSoundButton(); });
+    music.addEventListener("ended", () => { soundEnabled = false; updateSoundButton(); });
+    music.addEventListener("error", () => { soundEnabled = false; updateSoundButton(); });
   }
 
   if (soundButton) {
-    if (!window.AudioContext && !window.webkitAudioContext) soundButton.hidden = true;
-    soundButton.setAttribute("aria-pressed", "false");
+    updateSoundButton();
     soundButton.addEventListener("click", () => { void toggleSound(); });
   }
   document.addEventListener("visibilitychange", () => {

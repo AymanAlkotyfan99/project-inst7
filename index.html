@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#171310">
-  <meta name="description" content="دعوة إلى حكاية حب تزهر بحضوركم. ٣٠ آب ٢٠٢٦، الخامسة مساءً، إيليت بلازا.">
+  <meta name="description" content="دعوة إلى حكاية حب تزهر بحضوركم. ١ تشرين الثاني ٢٠٢٦، الخامسة مساءً، إيليت بلازا.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ar_AR">
   <meta property="og:title" content="دعوة إلى حكايتنا">
@@ -130,7 +130,21 @@
       </div>
       <p id="event-pending" class="pending-note">تفاصيل الليلة تُضاف قريبًا.</p>
       <button id="save-date" class="save-date-button" type="button" hidden>أضيفوا الموعد إلى التقويم <span aria-hidden="true">↗</span></button>
-      <div id="countdown" class="countdown" hidden aria-label="الوقت المتبقي حتى موعد الزفاف"></div>
+    </section>
+
+    <section id="the-moment" class="countdown-section" aria-labelledby="countdown-heading" hidden>
+      <div class="countdown-stage reveal">
+        <div class="moment-orbit" aria-hidden="true"><i></i><i></i><span>✦</span></div>
+        <div class="moment-heading">
+          <span class="moment-kicker" lang="en" dir="ltr">EVERY SECOND, CLOSER TO YOU</span>
+          <p class="section-label">وللشوق… توقيت آخر</p>
+          <h2 id="countdown-heading">كلّ نبضة، <em>تقرّبنا.</em></h2>
+          <p id="countdown-message">نعدّ اللحظات… حتى تصبحوا جزءًا من حكايتنا.</p>
+        </div>
+        <div id="countdown" class="countdown" role="timer" aria-live="off" aria-label="الوقت المتبقي حتى موعد الزفاف"></div>
+        <div class="moment-dateline"><span></span><time id="countdown-date" dir="ltr"></time><span></span></div>
+        <p class="moment-signoff">ثمّ يبدأ العمر الجميل.</p>
+      </div>
     </section>
 
     <section id="moments" class="gallery-section" aria-labelledby="gallery-heading">
@@ -161,6 +175,7 @@
       <div class="footer-bottom"><span lang="en" dir="ltr">WITH LOVE, ALWAYS.</span><button id="replay" class="quiet-button" type="button">من البداية، بكلّ الحب <span aria-hidden="true">↻</span></button></div>
     </footer>
   </main>
+  <audio id="wedding-music" preload="none" src="assets/voice/Love_Story_by_IndilaEthereal_Instrumental_Full_VersionM4A_128K.m4a#t=22"></audio>
   <button id="sound-toggle" class="sound-toggle" type="button" aria-label="تشغيل الصوت" aria-pressed="false"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
   <noscript><div class="noscript-note" dir="rtl">لتجربة الدعوة التفاعلية، يرجى تفعيل JavaScript في المتصفح.</div></noscript>
 </body>
